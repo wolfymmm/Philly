@@ -1,0 +1,153 @@
+.listening-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10000;
+  animation: fadeIn 0.3s ease-out;
+}
+.listening-overlay .listening-content {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 20px;
+  padding: 3rem;
+  text-align: center;
+  color: white;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  animation: slideUp 0.4s ease-out;
+  max-width: 400px;
+  width: 90%;
+}
+.listening-overlay .listening-content .listening-animation {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 2rem;
+}
+.listening-overlay .listening-content .listening-animation .pulse-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+.listening-overlay .listening-content .listening-animation .pulse-circle.delay-1 {
+  animation-delay: 0.7s;
+}
+.listening-overlay .listening-content .listening-animation .pulse-circle.delay-2 {
+  animation-delay: 1.4s;
+}
+.listening-overlay .listening-content .listening-animation .mic-icon {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  background: rgba(255, 255, 255, 0.2);
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+}
+.listening-overlay .listening-content .listening-text {
+  margin-bottom: 2rem;
+}
+.listening-overlay .listening-content .listening-text h3 {
+  font-size: 1.8rem;
+  margin: 0 0 1rem 0;
+  font-weight: 600;
+}
+.listening-overlay .listening-content .listening-text p {
+  margin: 0;
+  opacity: 0.9;
+  font-size: 1rem;
+}
+.listening-overlay .listening-content .stop-listening-btn {
+  background: rgba(255, 255, 255, 0.2);
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  color: white;
+  padding: 0.75rem 2rem;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  -webkit-backdrop-filter: blur(10px);
+          backdrop-filter: blur(10px);
+}
+.listening-overlay .listening-content .stop-listening-btn:hover {
+  background: rgba(255, 255, 255, 0.3);
+  border-color: rgba(255, 255, 255, 0.8);
+  transform: translateY(-2px);
+}
+.listening-overlay .listening-content .stop-listening-btn:active {
+  transform: translateY(0);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes pulse {
+  0% {
+    transform: translate(-50%, -50%) scale(1);
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-50%, -50%) scale(1.5);
+    opacity: 0;
+  }
+}
+@media (max-width: 768px) {
+  .listening-overlay .listening-content {
+    padding: 2rem;
+    margin: 1rem;
+  }
+  .listening-overlay .listening-content .listening-animation {
+    width: 100px;
+    height: 100px;
+  }
+  .listening-overlay .listening-content .listening-animation .mic-icon {
+    font-size: 2.5rem;
+    width: 70px;
+    height: 70px;
+  }
+  .listening-overlay .listening-content .listening-animation .pulse-circle {
+    width: 70px;
+    height: 70px;
+  }
+  .listening-overlay .listening-content .listening-text h3 {
+    font-size: 1.5rem;
+  }
+  .listening-overlay .listening-content .listening-text p {
+    font-size: 0.9rem;
+  }
+}/*# sourceMappingURL=ListeningOverlay.css.map */

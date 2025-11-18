@@ -1,0 +1,339 @@
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 80vh; // Зменшена висота для кращого вигляду
+  max-height: 800px; // Максимальна висота
+  grid-column: 2 / 12; // Займає 10 колонок з 12 (з відступами з обох боків)
+  margin: 40px auto; // Вертикальні відступи
+  background: #f5f5f500;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.chat-header {
+  color: black;
+  padding: 15px 20px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 18px;
+  position: relative;
+  z-index: 10;
+  
+  h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+}
+
+// Стилі для списку повідомлень
+.messages-container {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: relative;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 10px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    border-radius: 10px;
+  }
+}
+
+.message {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 18px;
+  position: relative;
+  animation: floatIn 0.3s ease-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  line-height: 1.4;
+  
+  &.user-message {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    color: white;
+    border-bottom-right-radius: 5px;
+  }
+  
+  &.ai-message {
+    align-self: flex-start;
+    background-color: #f0f0f0;
+    color: #333;
+    border-bottom-left-radius: 5px;
+  }
+}
+
+// Центральна GIF миші
+.mouse-gif {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80px;
+  height: 80px;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.7;
+  
+  .mouse-icon {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #6a11cb, #2575fc);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: float 3s ease-in-out infinite;
+    
+    &::before {
+      content: "🐭";
+      font-size: 2rem;
+    }
+  }
+}
+
+// Стилі для швидких питань
+.quick-questions {
+  padding: 15px 20px;
+  border-top: 1px solid #eee;
+  background-color: rgba(255, 255, 255, 0.8);
+  
+  .questions-title {
+    font-size: 0.9rem;
+    color: #666;
+    margin-bottom: 10px;
+    font-weight: 500;
+  }
+  
+  .questions-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .question-chip {
+    padding: 8px 12px;
+    background: linear-gradient(135deg, #6a11cb15, #2575fc15);
+    border: 1px solid #6a11cb30;
+    border-radius: 15px;
+    font-size: 0.85rem;
+    color: #6a11cb;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    
+    &:hover {
+      background: linear-gradient(135deg, #6a11cb25, #2575fc25);
+      transform: translateY(-1px);
+      box-shadow: 0 2px 8px rgba(106, 17, 203, 0.2);
+    }
+  }
+}
+
+// Стилі для області введення
+.input-area {
+  padding: 15px;
+  background-color: white;
+  border-top: 1px solid #eee;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  position: relative;
+  z-index: 10;
+}
+
+.search-bar {
+  flex: 1;
+  padding: 12px 15px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  outline: none;
+  font-size: 16px;
+  transition: all 0.3s;
+  background-color: #f8f9fa;
+  
+  &:focus {
+    border-color: #6a11cb;
+    box-shadow: 0 0 0 2px rgba(106, 17, 203, 0.2);
+    background-color: white;
+  }
+  
+  &::placeholder {
+    color: #999;
+  }
+}
+
+.voice-btn {
+  width: 45px;
+  height: 45px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  border: none;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 10px rgba(106, 17, 203, 0.3);
+  font-size: 1.2rem;
+  
+  &:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(106, 17, 203, 0.4);
+  }
+  
+  &.listening {
+    animation: pulse 1.5s infinite;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+  }
+}
+
+// Модальне вікно голосового введення
+.voice-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+  
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.voice-content {
+  background-color: white;
+  width: 80%;
+  max-width: 300px;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transform: scale(0.9);
+  transition: transform 0.3s;
+  
+  .voice-modal.active & {
+    transform: scale(1);
+  }
+}
+
+.listening-animation {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #6a11cb, #2575fc);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  animation: pulse 1.5s infinite;
+}
+
+.voice-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.cancel-btn {
+  padding: 8px 20px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  
+  &:hover {
+    background-color: #e0e0e0;
+  }
+}
+
+// Статусні індикатори
+.status-indicators {
+  position: absolute;
+  bottom: 80px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 5;
+}
+
+.status-indicator {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
+  &.speaking {
+    color: #6a11cb;
+    background-color: rgba(106, 17, 203, 0.1);
+  }
+  
+  &.listening {
+    color: #ee5a24;
+    background-color: rgba(238, 90, 36, 0.1);
+  }
+}
+
+// Анімації
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(106, 17, 203, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(106, 17, 203, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(106, 17, 203, 0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}

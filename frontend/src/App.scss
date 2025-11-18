@@ -1,0 +1,26 @@
+html {
+    font-family: 'Montserrat', sans-serif;
+    margin: 0;
+    padding: 0;
+    background: url(../public/background_gradient1.png) no-repeat center fixed;
+    background-size: 1100px auto;
+    background-color: #FFFCFC;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+main {
+  display: grid;
+  max-width: 1920px;
+  margin: 0 auto;
+  padding: 0 60px;
+
+  grid-template-columns: repeat(12, 60px);
+  column-gap: 40px;
+  row-gap: 60px; // ← ДОДАЙ ЦЕ
+  justify-content: center;
+}
