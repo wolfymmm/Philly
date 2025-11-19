@@ -1,1 +1,93 @@
-/*# sourceMappingURL=Tasks.css.map */
+.tasks-container {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: "Arial", sans-serif;
+  color: #333;
+}
+.tasks-container h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  font-size: 2rem;
+  color: #4a4a4a;
+}
+.tasks-container .add-task {
+  display: grid;
+  grid-template-columns: 4fr 4fr 1fr 1fr auto;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+.tasks-container .add-task input, .tasks-container .add-task select, .tasks-container .add-task button {
+  padding: 0.5rem 1rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+.tasks-container .add-task button {
+  background-color: #4a90e2;
+  color: white;
+  border: none;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.tasks-container .add-task button:hover {
+  background-color: #357ab7;
+}
+.tasks-container .task-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+  gap: 1.5rem;
+}
+.tasks-container .task-list .task-card {
+  background: #f9f9f9;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.tasks-container .task-list .task-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.tasks-container .task-list .task-card h4 {
+  margin: 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+.tasks-container .task-list .task-card p {
+  margin: 0.2rem 0;
+  font-size: 0.95rem;
+}
+.tasks-container .task-list .task-card select, .tasks-container .task-list .task-card input, .tasks-container .task-list .task-card button {
+  margin-top: 0.5rem;
+}
+.tasks-container .task-list .task-card button {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 0.4rem 0.8rem;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+.tasks-container .task-list .task-card button:hover {
+  background-color: #c0392b;
+}
+.tasks-container .task-list .task-card select {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 0.4rem;
+}
+.tasks-container .task-list .task-card.pending {
+  border-left: 5px solid #f39c12;
+}
+.tasks-container .task-list .task-card.in-progress {
+  border-left: 5px solid #3498db;
+}
+.tasks-container .task-list .task-card.completed {
+  border-left: 5px solid #2ecc71;
+}/*# sourceMappingURL=Tasks.css.map */

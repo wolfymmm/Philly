@@ -21,24 +21,36 @@ export const InputArea: React.FC<InputAreaProps> = ({
 }) => {
   return (
     <div className="input-container">
-      <textarea
-        value={input}
-        onChange={(e) => onInputChange(e.target.value)}
-        onKeyPress={onKeyPress}
-        placeholder="Ask about your schedule or tasks..."
-        rows={2}
-      />
-      <div className="button-group">
-        <button 
-          onClick={isListening ? onStopListening : onStartListening}
-          className={`voice-button ${isListening ? 'listening' : ''}`}
-        >
-          {isListening ? '🛑 Stop' : '🎤 Voice'}
-        </button>
-        <button onClick={onSendMessage} disabled={!input.trim()}>
-          Send
-        </button>
-      </div>
+  <div className="textarea-wrapper">
+    <textarea
+      value={input}
+      onChange={(e) => onInputChange(e.target.value)}
+      onKeyPress={onKeyPress}
+      placeholder="Ask about your schedule or tasks..."
+      rows={2}
+    />
+
+    <div className="icon-buttons">
+
+      {/* Відправка */}
+      <button 
+        onClick={onSendMessage} 
+        disabled={!input.trim()}
+        className="icon-btn send-btn"
+      >
+        <img src="/send.svg" alt="send" />
+      </button>
+      
+      {/* Мікрофон */}
+      <button 
+        onClick={isListening ? onStopListening : onStartListening}
+        className={`icon-btn mic-btn ${isListening ? "listening" : ""}`}
+      >
+        <img src="/micro.svg" alt="mic" />
+      </button>
     </div>
+  </div>
+</div>
+
   );
 };

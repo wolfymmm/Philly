@@ -5,16 +5,15 @@ import { Link } from 'react-router-dom';
 function Header() {
     return (
         <div className="home-container">
-        <div className="AI-button">AI Assistant</div>
-        <h1>Зустрічай Philly</h1>
-        <p>Твій розумний  ШІ-помічник, створений, щоб допомагати з організацією <br></br> навчального процесу та досягати цілей з легкістю.</p>
+        <div className="AI-button">Voice Assistant</div>
+        <h1>Meet Philly</h1>
+        <p>Your voice assistant, designed to help you organize your<br></br> learning process and achieve your goals with ease.</p>
         <div className="button-group-home">
         <Link to="/chat">
         <button className="begin-chat-button"> 
-            <img src="../public/icon-chat.svg" alt="chat" className="button-icon" />
-            Почати Чат</button></Link>
+            <img src="../public/icon-chat.svg" alt="chat" className="button-icon" />Start Chat</button></Link>
         <Link to="/about">
-        <button className="more-button">Більше</button>
+        <button className="more-button">More</button>
         </Link>
         </div>
         </div>

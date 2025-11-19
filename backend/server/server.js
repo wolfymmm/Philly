@@ -20,7 +20,7 @@ mongoose.connect('mongodb://localhost:27017/Philly', {
 
 // Маршрути
 app.use('/api/responses', assistantRoutes);
-app.use('/api/schedule', scheduleRoutes);
+app.use('/api/schedules', scheduleRoutes);
 app.use('/api/tasks', taskRoutes);
 
 const PORT = process.env.PORT || 5000;

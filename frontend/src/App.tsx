@@ -6,6 +6,7 @@ import Tasks from './components/Tasks/Tasks';
 import Header from './components/Header/Header';
 import Home from './components/Home/Home';
 import Chat from './components/Chat/Chat';
+import Login from './components/Login/Login';
 
 function App() {
   return (
@@ -16,8 +17,9 @@ function App() {
           <Route path="/" element={<Home />} /> 
           <Route path="/about" element={<About />} /> 
           <Route path="/shedule" element={<Shedule />} />
-          <Route path="/services" element={<Tasks />} />
+          <Route path="/tasks" element={<Tasks />} />
           <Route path="/chat" element={<Chat />} />
+          <Route path="/login" element={<Login />} />
         </Routes>
       </main>
     </>

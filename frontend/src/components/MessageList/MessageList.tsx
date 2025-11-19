@@ -11,7 +11,10 @@ export const MessageList: React.FC<MessageListProps> = ({ messages, messagesEndR
   return (
     <div className="messages-container">
       {messages.map((message, index) => (
-        <div key={index} className={`message ${message.sender}`}>
+        <div 
+          key={index} 
+          className={`message ${message.sender === "user" ? "user-message" : "ai-message"}`}
+        >
           <div className="message-content">
             <p style={{ whiteSpace: 'pre-line' }}>{message.text}</p>
           </div>

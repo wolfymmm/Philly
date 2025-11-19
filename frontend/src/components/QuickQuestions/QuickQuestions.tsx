@@ -13,7 +13,7 @@ export const QuickQuestions: React.FC<QuickQuestionsProps> = ({
   const getQuickQuestions = () => {
     return assistantResponses
       .filter(response => response.isActive)
-      .slice(0, 5)
+      .slice(0, 3)
       .map(response => response.trigger);
   };
 

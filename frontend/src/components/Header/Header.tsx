@@ -10,14 +10,16 @@ function Header() {
             </Link>
             <nav>
                 <ul className="nav-links">
-                    <li><Link to="/about">Хто я?</Link></li>
-                    <li><Link to="/shedule">Розклад</Link></li>
-                    <li><Link to="/tasks">Завдання</Link></li>
+                    <li><Link to="/about">About</Link></li>
+                    <li><Link to="/shedule">Schedule</Link></li>
+                    <li><Link to="/tasks">Tasks</Link></li>
                 </ul>
                 <div className="button-group-header">
-                 <button className="login-button">Увійти</button>
+                 <Link to="/login">
+                 <button className="login-button">Log In</button>
+                 </Link>
                  <Link to="/chat">
-                 <button className="try-button">Спробувати</button>
+                 <button className="try-button">Try</button>
                  </Link>
                 </div>
             </nav>

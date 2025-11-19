@@ -148,6 +148,11 @@ const Chat: React.FC = () => {
 
         <MessageList messages={messages} messagesEndRef={messagesEndRef} />
 
+        <div className="mouse-gif">
+          <img src="../public/mouse.gif" alt="Mouse GIF" />
+        </div>
+
+
         <InputArea
           input={input}
           isListening={isListening}
