@@ -70,3 +70,11 @@
     }
 }
 
+.header-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  cursor: pointer;
+  border: 2px solid #4da6ff;
+}

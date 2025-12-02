@@ -1,31 +1,46 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../AuthContext/AuthContext';
 import './Header.css';
 
 function Header() {
-    return (
-        <header className="header">
-            <Link to="/">
-            <img src="./public/PhillyLogo.svg" alt="Logo" className="logo" />
+  const { user } = useContext(AuthContext);
+
+  return (
+    <header className="header">
+      <Link to="/">
+        <img src="/PhillyLogo.svg" alt="Logo" className="logo" />
+      </Link>
+
+      <nav>
+        <ul className="nav-links">
+          <li><Link to="/about">About</Link></li>
+          <li><Link to="/shedule">Schedule</Link></li>
+          <li><Link to="/tasks">Tasks</Link></li>
+        </ul>
+
+        <div className="button-group-header">
+          {user ? (
+            <Link to="/profile">
+              <img
+                src={user.avatar || '/default-avatar.png'}
+                alt="Profile"
+                className="header-avatar"
+              />
             </Link>
-            <nav>
-                <ul className="nav-links">
-                    <li><Link to="/about">About</Link></li>
-                    <li><Link to="/shedule">Schedule</Link></li>
-                    <li><Link to="/tasks">Tasks</Link></li>
-                </ul>
-                <div className="button-group-header">
-                 <Link to="/login">
-                 <button className="login-button">Log In</button>
-                 </Link>
-                 <Link to="/chat">
-                 <button className="try-button">Try</button>
-                 </Link>
-                </div>
-            </nav>
-        </header>
-    );
+          ) : (
+            <Link to="/login">
+              <button className="login-button">Login</button>
+            </Link>
+          )}
+
+          <Link to="/chat">
+            <button className="try-button">Try</button>
+          </Link>
+        </div>
+      </nav>
+    </header>
+  );
 }
+
 export default Header;
-
-

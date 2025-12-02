@@ -2,16 +2,14 @@ html {
     font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
-    background: url(../public/background_gradient1.png) no-repeat center fixed;
-    background-size: 1100px auto;
-    background-color: #FFFCFC;
 }
 
 body {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
 }
+
 
 main {
   display: grid;
@@ -21,6 +19,5 @@ main {
 
   grid-template-columns: repeat(12, 60px);
   column-gap: 40px;
-  row-gap: 60px; // ← ДОДАЙ ЦЕ
   justify-content: center;
 }

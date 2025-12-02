@@ -1,43 +1,59 @@
-// AuthContext/AuthContext.tsx
-import React, { createContext, useState, ReactNode } from 'react';
+// src/context/AuthContext.tsx
+import { createContext, useState, useEffect, ReactNode } from 'react';
 import axios from 'axios';
 
-interface User {
-  id: string;
-  username: string;
-  email: string;
-}
-
 interface AuthContextType {
-  user: User | null;
   token: string | null;
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
+  user: any;
 }
 
-export const AuthContext = createContext<AuthContextType | null>(null);
+export const AuthContext = createContext<AuthContextType>({
+  token: null,
+  login: async () => {},
+  logout: () => {},
+  user: null,
+});
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
-  const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
+  const [user, setUser] = useState<any>(null);
+
+  // Завантаження токена з localStorage при старті
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken);
+      axios
+        .get('http://localhost:5000/api/auth/profile', {
+          headers: { Authorization: `Bearer ${storedToken}` }
+        })
+        .then(res => setUser(res.data))
+        .catch(() => logout());
+    }
+  }, []);
 
   const login = async (email: string, password: string) => {
     const res = await axios.post('http://localhost:5000/api/auth/login', { email, password });
+    localStorage.setItem('token', res.data.token);
     setToken(res.data.token);
-    setUser(res.data.user);
-    localStorage.setItem('token', res.data.token); // для збереження між сесіями
-    localStorage.setItem('user', JSON.stringify(res.data.user));
+
+    // Отримуємо дані користувача
+    const profile = await axios.get('http://localhost:5000/api/auth/profile', {
+      headers: { Authorization: `Bearer ${res.data.token}` }
+    });
+    setUser(profile.data);
   };
 
   const logout = () => {
-    setUser(null);
-    setToken(null);
     localStorage.removeItem('token');
-    localStorage.removeItem('user');
+    setToken(null);
+    setUser(null);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout }}>
+    <AuthContext.Provider value={{ token, login, logout, user }}>
       {children}
     </AuthContext.Provider>
   );

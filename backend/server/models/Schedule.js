@@ -24,11 +24,10 @@ const scheduleSchema = new mongoose.Schema({
       required: true
     },
     teacher: String,
-    room: String,
     type: {
       type: String,
-      enum: ['lecture', 'practice', 'lab', 'seminar'],
-      default: 'lecture'
+      enum: ['Lecture', 'Practice'],
+      default: 'Lecture'
     }
   }],
   weekNumber: {

@@ -1,0 +1,31 @@
+@charset "UTF-8";
+/* HomeLayout.css */
+.home-layout-wrapper {
+  width: 100%;
+  /* Додаємо сітку тут */
+  display: grid;
+  max-width: 1920px;
+  grid-template-columns: repeat(12, 60px);
+  -moz-column-gap: 40px;
+       column-gap: 40px;
+  justify-content: center;
+  grid-column: 1/-1; /* Займає всі 12 колонок */
+  padding: 60px 0; /* Відступи з боків */
+}
+
+.home-page {
+  width: 100%;
+  background: url(../../../public/background_gradient1.png) no-repeat center center;
+  background-size: 800px auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  grid-column: 1/-1;
+}
+
+.home-container-wrapper {
+  width: 100%;
+  max-width: 1200px;
+  margin: 0 auto;
+  box-sizing: border-box;
+}/*# sourceMappingURL=HomeLayout.css.map */

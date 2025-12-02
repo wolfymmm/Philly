@@ -2,15 +2,12 @@ html {
   font-family: "Montserrat", sans-serif;
   margin: 0;
   padding: 0;
-  background: url(../public/background_gradient1.png) no-repeat center fixed;
-  background-size: 1100px auto;
-  background-color: #FFFCFC;
 }
 
 body {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  background-color: #f9f9f9;
 }
 
 main {
@@ -21,6 +18,5 @@ main {
   grid-template-columns: repeat(12, 60px);
   -moz-column-gap: 40px;
        column-gap: 40px;
-  row-gap: 60px;
   justify-content: center;
 }/*# sourceMappingURL=App.css.map */

@@ -59,4 +59,14 @@
 }
 .header .try-button:hover {
   background: #fe7777;
+}
+
+.header-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  -o-object-fit: cover;
+     object-fit: cover;
+  cursor: pointer;
+  border: 2px solid #4da6ff;
 }/*# sourceMappingURL=Header.css.map */
