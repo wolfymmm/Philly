@@ -55,4 +55,23 @@ router.get('/all', async (req, res) => {
   }
 });
 
+router.put('/update-day', async (req, res) => {
+  try {
+    const { dayOfWeek, classes, weekType } = req.body;
+
+    const isOdd = weekType === "odd";
+
+    const updated = await Schedule.updateMany(
+      { dayOfWeek, weekNumber: { $mod: [2, isOdd ? 1 : 0] } },
+      { $set: { classes } }
+    );
+
+    res.json({ success: true, updated });
+  } catch (err) {
+    console.error("Update error:", err);
+    res.status(500).json({ error: "Failed to update" });
+  }
+});
+
+
 export default router;
