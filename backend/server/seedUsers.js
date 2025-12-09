@@ -1,10 +1,10 @@
 // seedUsers.ts
 import mongoose from 'mongoose';
-import User from './models/User.ts'; // твоя модель User
+import User from './models/User.ts'; // перевір, щоб шлях збігався
 
-const MONGO_URI = 'mongodb://localhost:27017/Philly';
+const MONGO_URI = 'mongodb://localhost:27017/Philly'; // твоя база
 
-const Users = [
+const users = [
   {
     username: 'admin',
     email: 'admin@example.com',
@@ -37,8 +37,8 @@ async function seedUsers() {
     await User.deleteMany({});
     console.log('Users collection cleared');
 
-    // Додаємо користувачів без хешування пароля (як ти просила)
-    for (let user of Users) {
+    // Додаємо користувачів
+    for (const user of users) {
       await User.create(user);
       console.log(`User ${user.username} created`);
     }

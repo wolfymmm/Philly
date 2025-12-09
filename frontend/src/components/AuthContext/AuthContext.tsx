@@ -7,6 +7,7 @@ interface AuthContextType {
   login: (email: string, password: string) => Promise<void>;
   logout: () => void;
   user: any;
+  setUser: React.Dispatch<React.SetStateAction<any>>; // Додано сюди
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -14,6 +15,7 @@ export const AuthContext = createContext<AuthContextType>({
   login: async () => {},
   logout: () => {},
   user: null,
+  setUser: () => {}, // І тут
 });
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
@@ -27,7 +29,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       setToken(storedToken);
       axios
         .get('http://localhost:5000/api/auth/profile', {
-          headers: { Authorization: `Bearer ${storedToken}` }
+          headers: { Authorization: `Bearer ${storedToken}` },
         })
         .then(res => setUser(res.data))
         .catch(() => logout());
@@ -41,7 +43,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
     // Отримуємо дані користувача
     const profile = await axios.get('http://localhost:5000/api/auth/profile', {
-      headers: { Authorization: `Bearer ${res.data.token}` }
+      headers: { Authorization: `Bearer ${res.data.token}` },
     });
     setUser(profile.data);
   };
@@ -53,7 +55,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ token, login, logout, user }}>
+    <AuthContext.Provider value={{ token, login, logout, user, setUser }}>
       {children}
     </AuthContext.Provider>
   );

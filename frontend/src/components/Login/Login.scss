@@ -1,0 +1,14 @@
+.login-wait-screen {
+  text-align: center;
+  animation: fadeIn 0.4s ease-in;
+  margin-top: 40px;
+
+  h2 {
+    margin-bottom: 10px;
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}

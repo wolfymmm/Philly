@@ -1,8 +1,15 @@
-// src/components/Profile/Profile.tsx
 import { useContext, useState } from 'react';
 import { AuthContext } from '../AuthContext/AuthContext';
 import axios from 'axios';
 import './Profile.scss';
+
+const AVAILABLE_AVATARS = [
+  'https://i.pravatar.cc/150?img=1',
+  'https://i.pravatar.cc/150?img=2',
+  'https://i.pravatar.cc/150?img=3',
+  'https://i.pravatar.cc/150?img=4',
+  'https://i.pravatar.cc/150?img=5'
+];
 
 export default function Profile() {
   const { user, setUser, logout } = useContext(AuthContext);
@@ -14,31 +21,21 @@ export default function Profile() {
   const [message, setMessage] = useState('');
 
   if (!user) {
-    return <p style={{ textAlign: 'center', marginTop: 50 }}>You are not logged in.</p>;
+    return <p className="not-logged">You are not logged in.</p>;
   }
 
-  const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!e.target.files || e.target.files.length === 0) return;
-    const file = e.target.files[0];
-
-    // Конвертуємо в base64 (для простоти, можна зберігати на сервері)
-    const reader = new FileReader();
-    reader.onloadend = () => {
-      setAvatar(reader.result as string);
-    };
-    reader.readAsDataURL(file);
+  const handleAvatarSelect = (url: string) => {
+    setAvatar(url);
   };
 
   const handleSave = async () => {
     try {
-      // Надсилаємо на сервер оновлення
       const res = await axios.put(
-        `http://localhost:5000/api/auth/profile`,
+        'http://localhost:5000/api/auth/profile',
         { username, email, avatar },
         { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
       );
-
-      setUser(res.data); // оновлюємо контекст
+      setUser(res.data);
       setMessage('Profile updated successfully');
       setEditing(false);
     } catch (err) {
@@ -49,12 +46,28 @@ export default function Profile() {
 
   return (
     <div className="profile-container">
-      <h2>Profile</h2>
+      <h2 className="profile-title">Profile</h2>
 
       <div className="profile-avatar">
-        <img src={avatar || '/default-avatar.png'} alt="Avatar" />
-        <input type="file" accept="image/*" onChange={handleAvatarChange} />
+        <img src={avatar} alt="Avatar" />
       </div>
+
+      {editing && (
+        <div className="avatar-selection">
+          <h4>Choose an avatar:</h4>
+          <div className="avatars-grid">
+            {AVAILABLE_AVATARS.map(url => (
+              <img
+                key={url}
+                src={url}
+                alt="avatar"
+                className={`avatar-item ${avatar === url ? 'selected' : ''}`}
+                onClick={() => handleAvatarSelect(url)}
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       <div className="profile-info">
         <label>
@@ -83,13 +96,13 @@ export default function Profile() {
       <div className="profile-buttons">
         {editing ? (
           <>
-            <button className="save-btn" onClick={handleSave}>Save</button>
-            <button className="cancel-btn" onClick={() => setEditing(false)}>Cancel</button>
+            <button className="btn save" onClick={handleSave}>Save</button>
+            <button className="btn cancel" onClick={() => setEditing(false)}>Cancel</button>
           </>
         ) : (
           <>
-            <button className="edit-btn" onClick={() => setEditing(true)}>Edit Profile</button>
-            <button className="logout-btn" onClick={logout}>Logout</button>
+            <button className="btn edit" onClick={() => setEditing(true)}>Edit Profile</button>
+            <button className="btn logout" onClick={logout}>Logout</button>
           </>
         )}
       </div>

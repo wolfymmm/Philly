@@ -33,8 +33,8 @@ function App() {
           <Route path="/" element={<Home />} /> 
           <Route path="/about" element={<About />} /> 
           <Route path="/shedule" element={<PrivateRoute><Shedule /></PrivateRoute>} />
-          <Route path="/tasks" element={<Tasks />} />
-          <Route path="/chat" element={<Chat />} />
+          <Route path="/tasks" element={<PrivateRoute><Tasks /></PrivateRoute>} />
+          <Route path="/chat" element={<PrivateRoute><Chat /></PrivateRoute>} />
           <Route path="/login" element={<Login />} />
            <Route
             path="/profile"
