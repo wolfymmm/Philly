@@ -1,0 +1,100 @@
+.auth-screen-overlay {
+  position: fixed;
+  top: 100px; /* Запас під хедер */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0);
+  z-index: 1000; /* Зменшено з 9999 */
+  display: flex;
+  align-items: flex-start; /* Змінено з center на flex-start */
+  justify-content: center;
+  animation: fadeIn 0.3s ease-in;
+  padding-top: 60px; /* Відступ зверху */
+}
+
+.auth-screen-content {
+  text-align: center;
+  max-width: 500px;
+  padding: 40px;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  
+  h2 {
+    font-weight: 600;
+    font-size: 28px;
+    margin-bottom: 15px;
+    color: #1f2937;
+  }
+  
+  p {
+    font-weight: 400;
+    font-size: 16px;
+    color: #717182;
+    margin-bottom: 30px;
+  }
+}
+
+.auth-screen-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  
+  @media (max-width: 480px) {
+    flex-direction: column;
+    gap: 12px;
+  }
+}
+
+.auth-button-primary {
+  background: #FDA4AF;
+  border: 1px solid #FDA4AF;
+  border-radius: 30px;
+  color: #9F1239;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 12px 30px;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  
+  &:hover {
+    background: #fe7777;
+    transform: translateY(-2px);
+  }
+}
+
+.auth-button-secondary {
+  background: #FAFAFA;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  color: #1f2937;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 12px 30px;
+  transition: all 0.3s ease;
+  min-width: 120px;
+  
+  &:hover {
+    background: #f0f0f0;
+    transform: translateY(-2px);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Альтернативний варіант - якщо хочете, щоб хедер був повністю видимий */
+.auth-screen-overlay {
+  top: 100;
+  height: calc(100vh - 80px); /* Висота мінус хедер */
+  margin-top: 80px; /* Відступ для хедера */
+}

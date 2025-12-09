@@ -1,17 +1,222 @@
-.login-wait-screen {
+.login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 70vh;
+  padding: 30px 20px 50px;
   text-align: center;
-  animation: fadeIn 0.4s ease-in;
-  margin-top: 40px;
+  grid-column: 1/-1;
 }
-.login-wait-screen h2 {
-  margin-bottom: 10px;
+.login-container h2 {
+  font-weight: 600;
+  font-size: 48px;
+  margin: 10px 0 20px 0;
+  color: #1f2937;
+}
+.login-container p {
+  font-weight: 400;
+  font-size: 18px;
+  color: #717182;
+  margin: 0 0 30px 0;
+  max-width: 400px;
 }
 
+.login-wait-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 50vh;
+  animation: fadeIn 0.5s ease-in;
+  grid-column: 1/-1;
+  padding-top: 20px;
+}
+.login-wait-screen h2 {
+  font-weight: 600;
+  font-size: 32px;
+  margin-bottom: 15px;
+  color: #1f2937;
+}
+.login-wait-screen p {
+  font-weight: 400;
+  font-size: 18px;
+  color: #717182;
+  margin: 0 0 15px 0;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  animation: slideUp 0.6s ease-out;
+}
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
 @keyframes fadeIn {
   from {
     opacity: 0;
   }
   to {
     opacity: 1;
+  }
+}
+
+.login-input {
+  font-size: 16px;
+  font-weight: 400;
+  padding: 14px 20px;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  background: #FAFAFA;
+  transition: all 0.3s ease;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+.login-input:focus {
+  border-color: #FDA4AF;
+  box-shadow: 0 0 0 3px rgba(253, 164, 175, 0.2);
+  background: white;
+}
+.login-input::-moz-placeholder {
+  color: #9ca3af;
+}
+.login-input::placeholder {
+  color: #9ca3af;
+}
+
+.login-button-huge {
+  background: #FDA4AF;
+  border: 1px solid #FDA4AF;
+  border-radius: 30px;
+  color: #9F1239;
+  font-size: 18px;
+  font-weight: 500;
+  cursor: pointer;
+  padding: 14px 30px;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 5px;
+}
+.login-button-huge:hover {
+  background: #fe7777;
+  box-shadow: 0 4px 12px rgba(253, 164, 175, 0.3);
+}
+.login-button-huge:disabled {
+  background: #fbbfcc;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.login-error {
+  font-weight: 400;
+  font-size: 16px;
+  color: #dc2626;
+  margin: 8px 0;
+  padding: 10px 20px;
+  background: #fef2f2;
+  border-radius: 30px;
+  border: 1px solid #fecaca;
+  animation: shake 0.5s ease-in-out;
+}
+@keyframes shake {
+  0%, 100% {
+    transform: translateX(0);
+  }
+  25% {
+    transform: translateX(-5px);
+  }
+  75% {
+    transform: translateX(5px);
+  }
+}
+
+.login-links {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 16px;
+  color: #717182;
+}
+.login-links a {
+  color: #FDA4AF;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+.login-links a:hover {
+  color: #fe7777;
+  text-decoration: underline;
+}
+
+.button-group-home {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  margin-top: 15px;
+}
+
+.AI-button {
+  background: #FDF2F8;
+  border-radius: 30px;
+  color: #9F1239;
+  font-size: 16px;
+  padding: 3px 14px;
+  border: none;
+  cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .login-container {
+    padding: 20px 20px 40px;
+    min-height: 60vh;
+  }
+  .login-container h2 {
+    font-size: 36px;
+    margin: 5px 0 15px 0;
+  }
+  .login-container p {
+    font-size: 16px;
+    margin: 0 0 25px 0;
+  }
+  .login-wait-screen {
+    min-height: 40vh;
+    padding-top: 10px;
+  }
+  .login-wait-screen h2 {
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  .login-wait-screen p {
+    font-size: 16px;
+    margin: 0 0 10px 0;
+  }
+  main {
+    padding: 0 20px !important;
+  }
+}
+@media (max-width: 480px) {
+  .login-container h2 {
+    font-size: 28px;
+  }
+  .login-wait-screen h2 {
+    font-size: 20px;
+  }
+  .login-wait-screen p {
+    font-size: 14px;
   }
 }/*# sourceMappingURL=Login.css.map */

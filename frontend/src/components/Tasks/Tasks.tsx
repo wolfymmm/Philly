@@ -32,7 +32,7 @@ function Tasks() {
 
   const handleAddTask = async () => {
     try {
-      if (!newTask.title || !newTask.dueDate) return alert('Title and Due Date required');
+      if (!newTask.title || !newTask.dueDate) return alert('Title and Due Date are required');
       await axios.post('http://localhost:5000/api/tasks', newTask);
       setNewTask({});
       fetchTasks();
@@ -69,15 +69,27 @@ function Tasks() {
     }
   };
 
+  const priorityLabels = {
+    low: 'Low',
+    medium: 'Medium',
+    high: 'High'
+  };
+
+  const statusLabels = {
+    pending: 'Pending',
+    'in progress': 'In Progress',
+    completed: 'Completed'
+  };
+
   return (
     <div className="tasks-container">
-      <h2>Задачі</h2>
+      <h2>Tasks</h2>
 
-      {/* Форма додавання */}
+      {/* Add task form */}
       <div className="add-task">
         <input
           type="text"
-          placeholder="Назва завдання"
+          placeholder="Task title"
           value={newTask.title || ''}
           onChange={e => setNewTask({ ...newTask, title: e.target.value })}
         />
@@ -90,23 +102,28 @@ function Tasks() {
           value={newTask.priority || 'medium'}
           onChange={e => setNewTask({ ...newTask, priority: e.target.value as Task['priority'] })}
         >
-          <option value="low">Низький</option>
-          <option value="medium">Середній</option>
-          <option value="high">Високий</option>
+          <option value="low">Low</option>
+          <option value="medium">Medium</option>
+          <option value="high">High</option>
         </select>
-        <button onClick={handleAddTask}>Додати</button>
+        <button onClick={handleAddTask}>Add Task</button>
       </div>
 
-      {/* Список завдань */}
+      {/* Task list */}
       <div className="task-list">
         {tasks.map(task => (
-          <div key={task._id} className={`task-card ${task.status.replace(' ', '-')}`}>
+          <div 
+            key={task._id} 
+            className={`task-card ${task.status.replace(' ', '-')}`}
+            data-priority={task.priority}
+          >
             {editingTask?._id === task._id ? (
-              <>
+              <div>
                 <input
                   type="text"
                   value={editingTask.title || ''}
                   onChange={e => setEditingTask({ ...editingTask, title: e.target.value })}
+                  placeholder="Task title"
                 />
                 <input
                   type="date"
@@ -117,29 +134,41 @@ function Tasks() {
                   value={editingTask.priority || 'medium'}
                   onChange={e => setEditingTask({ ...editingTask, priority: e.target.value as Task['priority'] })}
                 >
-                  <option value="low">Низький</option>
-                  <option value="medium">Середній</option>
-                  <option value="high">Високий</option>
+                  <option value="low">Low</option>
+                  <option value="medium">Medium</option>
+                  <option value="high">High</option>
                 </select>
-                <button onClick={() => handleUpdateTask(editingTask as Task)}>Зберегти</button>
-                <button onClick={() => setEditingTask(null)}>Скасувати</button>
-              </>
+                <button onClick={() => handleUpdateTask(editingTask as Task)}>Save</button>
+                <button onClick={() => setEditingTask(null)}>Cancel</button>
+              </div>
             ) : (
               <>
                 <h4>{task.title}</h4>
-                <p>Статус: {task.status}</p>
-                <p>Пріоритет: {task.priority}</p>
-                <p>Термін: {new Date(task.dueDate).toLocaleDateString()}</p>
-                <button onClick={() => setEditingTask(task)}>Редагувати</button>
-                <button onClick={() => handleDeleteTask(task._id)}>Видалити</button>
-                <select
-                  value={task.status}
-                  onChange={e => handleStatusChange(task, e.target.value as Task['status'])}
-                >
-                  <option value="pending">Pending</option>
-                  <option value="in progress">In Progress</option>
-                  <option value="completed">Completed</option>
-                </select>
+                <p>
+                  Status: {statusLabels[task.status]}
+                  <span className={`status-badge ${task.status.replace(' ', '-')}`}>
+                    {task.status}
+                  </span>
+                </p>
+                <p>
+                  Priority: {priorityLabels[task.priority]}
+                  <span className={`priority-badge ${task.priority}`}>
+                    {task.priority}
+                  </span>
+                </p>
+                <p>Due Date: {new Date(task.dueDate).toLocaleDateString()}</p>
+                <div>
+                  <button onClick={() => setEditingTask(task)}>Edit</button>
+                  <button onClick={() => handleDeleteTask(task._id)}>Delete</button>
+                  <select
+                    value={task.status}
+                    onChange={e => handleStatusChange(task, e.target.value as Task['status'])}
+                  >
+                    <option value="pending">Pending</option>
+                    <option value="in progress">In Progress</option>
+                    <option value="completed">Completed</option>
+                  </select>
+                </div>
               </>
             )}
           </div>

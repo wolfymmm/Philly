@@ -1,108 +1,306 @@
 .tasks-container {
-  max-width: 700px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-family: 'Arial', sans-serif;
-  color: #333;
-
+  grid-column: 1 / -1;
+  padding: 30px 20px 50px;
+  
   h2 {
+    font-weight: 600;
+    font-size: 48px;
+    margin: 10px 0 40px 0;
+    color: #1f2937;
     text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2rem;
-    color: #4a4a4a;
+  }
+}
+
+// Форма додавання завдань
+.add-task {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+  margin-bottom: 40px;
+  padding: 25px;
+  background: #FAFAFA;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+
+  input, select {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    font-weight: 400;
+    padding: 14px 20px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    background: white;
+    transition: all 0.3s ease;
+    outline: none;
+    flex: 1;
+    min-width: 200px;
+
+    &:focus {
+      border-color: #FDA4AF;
+      box-shadow: 0 0 0 3px rgba(253, 164, 175, 0.2);
+    }
+
+    &::placeholder {
+      color: #9ca3af;
+    }
+  }
+
+  button {
+    background: #FDA4AF;
+    border: 1px solid #FDA4AF;
+    border-radius: 30px;
+    color: #9F1239;
+    font-size: 16px;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 14px 30px;
+    transition: all 0.3s ease;
+    min-width: 120px;
+
+    &:hover {
+      background: #fe7777;
+      box-shadow: 0 4px 12px rgba(253, 164, 175, 0.3);
+    }
+  }
+}
+
+// Список завдань
+.task-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
+}
+
+// Картка завдання
+.task-card {
+  background: white;
+  border-radius: 20px;
+  padding: 25px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-left: 4px solid #ddd;
+  position: relative;
+
+  &:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+  }
+
+  &.pending {
+    border-left-color: #FDA4AF;
+  }
+
+  &.in-progress {
+    border-left-color: #FBBF24;
+  }
+
+  &.completed {
+    border-left-color: #10B981;
+  }
+
+  h4 {
+    font-weight: 600;
+    font-size: 20px;
+    margin: 0 0 15px 0;
+    color: #1f2937;
+  }
+
+  p {
+    font-weight: 400;
+    font-size: 14px;
+    color: #717182;
+    margin: 8px 0;
+    display: flex;
+    align-items: center;
+
+    &::before {
+      content: '•';
+      margin-right: 8px;
+      color: #FDA4AF;
+    }
+  }
+
+  // Індикатор пріоритету
+  &::after {
+    content: '';
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+
+  &[data-priority="low"]::after {
+    background-color: #10B981;
+  }
+
+  &[data-priority="medium"]::after {
+    background-color: #FBBF24;
+  }
+
+  &[data-priority="high"]::after {
+    background-color: #EF4444;
+  }
+}
+
+// Група кнопок у картці
+.task-card > div:last-child {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 20px;
+  align-items: center;
+
+  input, select {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    padding: 10px 15px;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    background: #FAFAFA;
+    transition: all 0.3s ease;
+    outline: none;
+    flex: 1;
+    min-width: 120px;
+
+    &:focus {
+      border-color: #FDA4AF;
+    }
+  }
+
+  button {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 14px;
+    font-weight: 500;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: 1px solid;
+    flex: 1;
+    min-width: 100px;
+
+    &:first-of-type {
+      background: #FDA4AF;
+      border-color: #FDA4AF;
+      color: #9F1239;
+
+      &:hover {
+        background: #fe7777;
+      }
+    }
+
+    &:nth-of-type(2) {
+      background: #FAFAFA;
+      border-color: #ddd;
+      color: #1f2937;
+
+      &:hover {
+        background: #f0f0f0;
+      }
+    }
+  }
+
+  select {
+    background: white;
+    border-color: #ddd;
+    color: #1f2937;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%239ca3af' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 12px;
+    padding-right: 35px;
+  }
+}
+
+// Статус баджи
+.status-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-left: 10px;
+
+  &.pending {
+    background: #FDF2F8;
+    color: #9F1239;
+  }
+
+  &.in-progress {
+    background: #FFFBEB;
+    color: #92400E;
+  }
+
+  &.completed {
+    background: #ECFDF5;
+    color: #065F46;
+  }
+}
+
+// Пріоритет баджи
+.priority-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 30px;
+  font-size: 12px;
+  font-weight: 500;
+  margin-left: 10px;
+
+  &.low {
+    background: #ECFDF5;
+    color: #065F46;
+  }
+
+  &.medium {
+    background: #FFFBEB;
+    color: #92400E;
+  }
+
+  &.high {
+    background: #FEF2F2;
+    color: #991B1B;
+  }
+}
+
+// Адаптивність
+@media (max-width: 768px) {
+  .tasks-container {
+    padding: 20px 15px 40px;
+    
+    h2 {
+      font-size: 36px;
+      margin: 5px 0 30px 0;
+    }
   }
 
   .add-task {
-    display: grid;
-    grid-template-columns: 4fr 4fr 1fr 1fr auto;
-    gap: 1rem;
-    margin-bottom: 2rem;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
 
     input, select, button {
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-    }
-
-    button {
-      background-color: #4a90e2;
-      color: white;
-      border: none;
-      cursor: pointer;
-      transition: background 0.3s;
-
-      &:hover {
-        background-color: #357ab7;
-      }
+      width: 100%;
+      min-width: auto;
     }
   }
 
   .task-list {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 1.5rem;
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
 
-    .task-card {
-      background: #f9f9f9;
-      border: 1px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 1rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.5rem;
-      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-      transition: transform 0.2s, box-shadow 0.2s;
+  .task-card {
+    padding: 20px;
+  }
+}
 
-      &:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-      }
-
-      h4 {
-        margin: 0;
-        font-size: 1.2rem;
-        color: #333;
-      }
-
-      p {
-        margin: 0.2rem 0;
-        font-size: 0.95rem;
-      }
-
-      select, input, button {
-        margin-top: 0.5rem;
-      }
-
-      button {
-        background-color: #e74c3c;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        padding: 0.4rem 0.8rem;
-        cursor: pointer;
-        transition: background 0.3s;
-
-        &:hover {
-          background-color: #c0392b;
-        }
-      }
-
-      select {
-        border: 1px solid #ccc;
-        border-radius: 6px;
-        padding: 0.4rem;
-      }
-
-      &.pending {
-        border-left: 5px solid #f39c12;
-      }
-      &.in-progress {
-        border-left: 5px solid #3498db;
-      }
-      &.completed {
-        border-left: 5px solid #2ecc71;
-      }
+@media (max-width: 480px) {
+  .tasks-container {
+    h2 {
+      font-size: 28px;
     }
   }
 }
