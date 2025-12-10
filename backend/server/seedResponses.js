@@ -1,191 +1,226 @@
-import mongoose from 'mongoose';
-import AssistantResponse from './models/AssistantResponse.js';
+import { MongoClient } from 'mongodb';
 
-const seedData = [
-  {
-    trigger: "hello",
-    response: "Hello! How can I help you today?",
-    category: "greeting",
-    isActive: true
-  },
-  {
-    trigger: "hi",
-    response: "Hi! What can I do for you?",
-    category: "greeting",
-    isActive: true
-  },
-   {
-    trigger: "how many classes do i have on Monday",
-    response: "Let me check your schedule. One moment!",
-    category: "schedule",
-    isActive: true
-  },
-    {
-    trigger: "how many classes do i have on Tuesday",
-    response: "Let me check your schedule. One moment!",
-    category: "schedule",
-    isActive: true
-  },
-   {
-    trigger: "how many classes do i have on Wednesday",
-    response: "Let me check your schedule. One moment!",
-    category: "schedule",
-    isActive: true
-  },
-   {
-    trigger: "how many classes do i have on Thursday",
-    response: "Let me check your schedule. One moment!",
-    category: "schedule",
-    isActive: true
-  },
-   {
-    trigger: "how many classes do i have on Friday",
-    response: "Let me check your schedule. One moment!",
-    category: "schedule",
-    isActive: true
-  },
-   {
-    trigger: "how many classes do i have on Saturday",
-    response: "Let me check your schedule. One moment!",
-    category: "schedule",
-    isActive: true
-  },
-   {
-    trigger: "how many classes do i have on Sunday",
-    response: "You have no classes on Sunday! Relax!",
-    category: "schedule",
-    isActive: true
-  },
-  {
-    trigger: "how many classes do i have today",
-    response: "Let me check your schedule. One moment!",
-    category: "schedule",
-    isActive: true
-  },
-   {
-    trigger: "how many classes do i have tomorrow",
-    response: "Let me check your schedule. One moment!",
-    category: "schedule",
-    isActive: true
-  },
-   {
-    trigger: "how many classes did I have yesterday",
-    response: "Let me check your schedule. One moment!",
-    category: "schedule",
-    isActive: true
-  },
-   {
-    trigger: "what classes do i have on Monday",
-    response: "Checking your schedule...",
-    category: "schedule",
-    isActive: true
-  },
-   {
-    trigger: "what classes do i have on Tuesday",
-    response: "Checking your schedule...",
-    category: "schedule",
-    isActive: true
-  },
-    {
-    trigger: "what classes do i have on Wednesday",
-    response: "Checking your schedule...",
-    category: "schedule",
-    isActive: true
-  },
-    {
-    trigger: "what classes do i have on Thursday",
-    response: "Checking your schedule...",
-    category: "schedule",
-    isActive: true
-  },
-    {
-    trigger: "what classes do i have on Friday",
-    response: "Checking your schedule...",
-    category: "schedule",
-    isActive: true
-  },
-    {
-    trigger: "what classes do i have on Saturday",
-    response: "Checking your schedule...",
-    category: "schedule",
-    isActive: true
-  },
-    {
-    trigger: "what classes do i have on Sunday",
-    response: "You have no classes on Sunday! Relax!",
-    category: "schedule",
-    isActive: true
-  },
-   {
-    trigger: "what classes do i have tomorrow",
-    response: "Checking your schedule for tomorrow...",
-    category: "schedule",
-    isActive: true
-  },
-     {
-    trigger: "what classes did i have yesterday",
-    response: "Checking your schedule for yesterday...",
-    category: "schedule",
-    isActive: true
-  },
-  {
-    trigger: "what classes do i have today",
-    response: "Checking your schedule for today...",
-    category: "schedule",
-    isActive: true
-  },
-  {
-    trigger: "who are you",
-    response: "My name is Philly🐁 I'm your personal assistant. How can I help you today?",
-    category: "about",
-    isActive: true
-  },
-  {
-    trigger: "help",
-    response: "Sure! Just tell me what you need help with.",
-    category: "general",
-    isActive: true
-  },
-  {
-    trigger: "what time is it",
-    response: "Let me check the current time for you.",
-    category: "general",
-    isActive: true
-  },
-  {
-    trigger: "what the day is today",
-    response: "Let me check...",
-    category: "general",
-    isActive: true
-  },
-    {
-    trigger: "how many tasks do I have",
-    response: "Let me check...",
-    category: "tasks",
-    isActive: true
-  },
-];
+async function seedResponses() {
+  const uri = 'mongodb://localhost:27017';
+  const client = new MongoClient(uri);
 
-async function seed() {
   try {
-    await mongoose.connect('mongodb://127.0.0.1:27017/Philly', {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await client.connect();
+    console.log('✅ Connected to MongoDB');
+    
+    const database = client.db('Philly');
+    const collection = database.collection('Responses');
+    
+    // 1. Очищення старих записів
+    await collection.deleteMany({});
+    console.log('🗑️  Old responses cleared');
+    
+    // 2. Нові шаблони (УВАЖНО ПЕРЕВІРЕНІ ДНІ)
+    const responses = [
 
-    console.log('Connected to MongoDB.');
+      // --- TOMORROW (Додано точні фрази!) ---
+      {
+        trigger: "how many classes do i have tomorrow",
+        response: "Tomorrow, you have {classes_count} classes. Here is the schedule:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      {
+        trigger: "do i have classes tomorrow",
+        response: "Tomorrow, you have {classes_count} classes. Here is the schedule:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      {
+        trigger: "what classes do i have tomorrow",
+        response: "Here is your schedule for tomorrow:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      
+      // --- TODAY (Додаємо для симетрії) ---
+      {
+        trigger: "how many classes do i have today",
+        response: "Today, you have {classes_count} classes:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      
+      // --- ДНІ ТИЖНЯ (Залишаємо як було) ---
+      {
+        trigger: "how many classes do i have on monday",
+        response: "On Monday, you have {classes_count} classes. Here is the schedule:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      {
+        trigger: "what classes do i have on monday",
+        response: "Here is your schedule for Monday:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      // --- MONDAY ---
+      {
+        trigger: "how many classes do i have on monday",
+        response: "On Monday, you have {classes_count} classes. Here is the schedule:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      {
+        trigger: "what classes do i have on monday",
+        response: "Here is your schedule for Monday:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
 
-    await AssistantResponse.deleteMany({});
-    console.log('Cleared old AssistantResponse records.');
+      // --- TUESDAY ---
+      {
+        trigger: "how many classes do i have on tuesday",
+        response: "On Tuesday, you have {classes_count} classes. Here is the schedule:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      {
+        trigger: "what classes do i have on tuesday",
+        response: "Here is your schedule for Tuesday:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
 
-    const created = await AssistantResponse.insertMany(seedData);
-    console.log(`Inserted ${created.length} AssistantResponse documents.`);
+      // --- WEDNESDAY ---
+      {
+        trigger: "how many classes do i have on wednesday",
+        response: "On Wednesday, you have {classes_count} classes. Here is the schedule:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      {
+        trigger: "what classes do i have on wednesday",
+        response: "Here is your schedule for Wednesday:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
 
-    mongoose.connection.close();
-    console.log('Database connection closed.');
+      // --- THURSDAY ---
+      {
+        trigger: "how many classes do i have on thursday",
+        response: "On Thursday, you have {classes_count} classes. Here is the schedule:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      {
+        trigger: "what classes do i have on thursday",
+        response: "Here is your schedule for Thursday:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+
+      // --- FRIDAY ---
+      {
+        trigger: "how many classes do i have on friday",
+        response: "On Friday, you have {classes_count} classes. Here is the schedule:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      {
+        trigger: "what classes do i have on friday",
+        response: "Here is your schedule for Friday:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+
+      // --- SATURDAY (Виправлено!) ---
+      {
+        trigger: "how many classes do i have on saturday",
+        response: "On Saturday, you have {classes_count} classes. Here is the schedule:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      {
+        trigger: "what classes do i have on saturday",
+        response: "Here is your schedule for Saturday:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+
+      // --- SUNDAY (Додано!) ---
+      {
+        trigger: "how many classes do i have on sunday",
+        response: "On Sunday, you have {classes_count} classes. Here is the schedule:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      {
+        trigger: "what classes do i have on sunday",
+        response: "Here is your schedule for Sunday:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+
+      // --- GENERAL (TODAY/TOMORROW) ---
+      {
+        trigger: "classes today",
+        response: "Today you have {classes_count} classes:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      {
+        trigger: "what is my schedule today",
+        response: "Here is your schedule for today:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      {
+        trigger: "classes tomorrow",
+        response: "Tomorrow you have {classes_count} classes:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+      {
+        trigger: "what is my schedule tomorrow",
+        response: "Here is your schedule for tomorrow:\n{schedule_info}",
+        category: "schedule",
+        isActive: true
+      },
+
+      // --- TASKS ---
+      {
+        trigger: "how many tasks do i have",
+        response: "You have {tasks_count} pending tasks. {tasks_today} are due today.",
+        category: "tasks",
+        isActive: true
+      },
+      {
+        trigger: "my tasks",
+        response: "You have {tasks_count} pending tasks. {tasks_today} due today.",
+        category: "tasks",
+        isActive: true
+      },
+
+      // --- GREETING & HELP ---
+      {
+        trigger: "hello",
+        response: "Hello! I can help you with your schedule and tasks. Just ask!",
+        category: "greeting",
+        isActive: true
+      },
+      {
+        trigger: "help",
+        response: "Try asking: 'What classes do I have on Saturday?' or 'My tasks'.",
+        category: "help",
+        isActive: true
+      }
+    ];
+    
+    await collection.insertMany(responses);
+    console.log(`✅ Successfully inserted ${responses.length} responses`);
+    
   } catch (error) {
-    console.error('Seed error:', error);
+    console.error('❌ Error seeding responses:', error);
+  } finally {
+    await client.close();
+    process.exit(0);
   }
 }
 
-seed();
+seedResponses();

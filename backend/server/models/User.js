@@ -1,11 +1,12 @@
-// models/User.ts
 import mongoose from 'mongoose';
 
 const userSchema = new mongoose.Schema({
   email: { 
     type: String, 
     required: true, 
-    unique: true 
+    unique: true,
+    trim: true,
+    lowercase: true
   },
   password: { 
     type: String, 
@@ -35,7 +36,7 @@ const userSchema = new mongoose.Schema({
 
 // Оновлюємо updatedAt перед збереженням
 userSchema.pre('save', function(next) {
-  this.updatedAt = Date.now();
+  this.updatedAt = new Date();
   next();
 });
 

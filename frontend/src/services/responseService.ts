@@ -1,156 +1,245 @@
-import type { Task, Schedule } from '../types/types';
 import { API_BASE_URL } from '../types/types';
 
-// Доповнюємо типи для API відповідей
-interface ScheduleResponse extends Schedule {
-  message?: string;
+// === НАЛАШТУВАННЯ ===
+// Має співпадати з бекендом
+const SEMESTER_START = new Date('2025-12-08'); 
+
+// Типи даних
+interface ClassItem {
+  subject: string;
+  startTime: string;
+  endTime: string;
+  teacher?: string;
+  type?: 'Lecture' | 'Practice';
 }
 
-export const responseService = {
+interface ScheduleResponse {
+  dayOfWeek?: string;
+  date?: string;
+  classes?: ClassItem[];
+  message?: string;
+  weekNumber?: number;
+}
+
+interface Task {
+  _id: string;
+  title: string;
+  status: 'pending' | 'in progress' | 'completed';
+  dueDate: string;
+  priority: 'low' | 'medium' | 'high';
+}
+
+class ResponseService {
+  
+  // === 0. АВТОРИЗАЦІЯ ===
+  // Достаємо токен і формуємо заголовки
+  private getHeaders() {
+    const token = localStorage.getItem('token');
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': token ? `Bearer ${token}` : ''
+    };
+  }
+
+  // === 1. ВИЗНАЧЕННЯ ТИЖНЯ ===
+  private getCurrentWeekType(): 'odd' | 'even' {
+    const today = new Date();
+    
+    const start = new Date(SEMESTER_START);
+    start.setHours(0, 0, 0, 0);
+    
+    const current = new Date(today);
+    current.setHours(0, 0, 0, 0);
+
+    const diffTime = current.getTime() - start.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    
+    const weeksPassed = Math.floor(diffDays / 7);
+
+    // weeksPassed парне -> Odd (1-й тиждень)
+    const isOddWeek = weeksPassed % 2 === 0;
+
+    console.log(`📅 Semester Logic: Weeks passed: ${weeksPassed}. It is an ${isOddWeek ? 'ODD (1st)' : 'EVEN (2nd)'} week.`);
+    
+    return isOddWeek ? 'odd' : 'even';
+  }
+
+  // === 2. ОБРОБКА ТРИГЕРІВ ===
+  private extractDayFromTrigger(trigger: string): string {
+    const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+    const lowerTrigger = trigger.toLowerCase();
+    for (const day of days) {
+      if (lowerTrigger.includes(day)) return day;
+    }
+    return '';
+  }
+
   async processDynamicResponse(responseTemplate: string, trigger: string): Promise<string> {
-    // Tasks data processing
-    if (responseTemplate.includes('{tasks_count}') || 
-        responseTemplate.includes('{tasks_today}') ||
-        responseTemplate.includes('{upcoming_tasks}') ||
-        responseTemplate.includes('{overdue_tasks}')) {
+    
+    // --- РОЗКЛАД ---
+    if (responseTemplate.includes('{classes_count}') || 
+        responseTemplate.includes('{schedule_info}') ||
+        trigger.includes('classes') || trigger.includes('schedule')) {
       
+      let day = this.extractDayFromTrigger(trigger);
+      let scheduleData: ScheduleResponse;
+      let targetLabel = '';
+
       try {
-        const [tasks, todayTasks, upcomingTasks, overdueTasks] = await Promise.all([
-          this.fetchTasks(),
-          this.fetchTodayTasks(),
-          this.fetchUpcomingTasks(),
-          this.fetchOverdueTasks()
-        ]);
-
-        const pendingTasks = tasks.filter(task => 
-          task.status === 'pending' || task.status === 'in progress'
-        );
-
-        let finalResponse = responseTemplate
-          .replace('{tasks_count}', pendingTasks.length.toString())
-          .replace('{tasks_today}', todayTasks.length.toString())
-          .replace('{upcoming_tasks}', upcomingTasks.length.toString())
-          .replace('{overdue_tasks}', overdueTasks.length.toString());
-
-        if (trigger.includes('today') && todayTasks.length > 0) {
-          finalResponse += '\n\n' + this.formatTasksList(todayTasks, 'today');
-        } else if (trigger.includes('upcoming') && upcomingTasks.length > 0) {
-          finalResponse += '\n\n' + this.formatTasksList(upcomingTasks, 'upcoming');
-        } else if (trigger.includes('overdue') && overdueTasks.length > 0) {
-          finalResponse += '\n\n' + this.formatTasksList(overdueTasks, 'overdue');
+        if (trigger.includes('tomorrow') || responseTemplate.toLowerCase().includes('tomorrow')) {
+          scheduleData = await this.fetchTomorrowSchedule();
+          targetLabel = 'Tomorrow'; 
+        } else if (trigger.includes('today') || responseTemplate.toLowerCase().includes('today')) {
+          scheduleData = await this.fetchTodaySchedule();
+          targetLabel = 'Today';
+        } else if (day) {
+          scheduleData = await this.fetchScheduleForDay(day);
+          targetLabel = day.charAt(0).toUpperCase() + day.slice(1);
+        } else {
+          scheduleData = await this.fetchTodaySchedule();
+          targetLabel = 'Today';
         }
 
-        return finalResponse;
+        if (scheduleData.dayOfWeek) {
+            const realDay = scheduleData.dayOfWeek.charAt(0).toUpperCase() + scheduleData.dayOfWeek.slice(1);
+            if (targetLabel === 'Tomorrow' || targetLabel === 'Today') {
+                targetLabel = `${targetLabel} (${realDay})`;
+            } else {
+                targetLabel = realDay;
+            }
+        }
+
+        const classCount = scheduleData.classes?.length || 0;
+        let result = responseTemplate;
+
+        result = result.replace(/{classes_count}/g, classCount.toString());
+
+        if (result.includes('{schedule_info}')) {
+          const scheduleText = this.formatScheduleResponse(scheduleData, targetLabel);
+          result = result.replace('{schedule_info}', scheduleText);
+        }
+
+        return result;
+
       } catch (error) {
-        console.error('Error fetching tasks data:', error);
-        return responseTemplate;
+        console.error("Error processing schedule:", error);
+        return "I couldn't access your schedule. Please make sure you are logged in.";
       }
     }
 
-    // Schedule data processing
-    if (responseTemplate.includes('{schedule_today}') || 
-        responseTemplate.includes('{schedule_tomorrow}')) {
-      
-      try {
-        let finalResponse = responseTemplate;
-
-        if (responseTemplate.includes('{schedule_today}')) {
-          const scheduleData = await this.fetchTodaySchedule();
-          const hasNoClasses = (scheduleData as ScheduleResponse).message === 'No classes today' || 
-                              !scheduleData.classes?.length;
-          finalResponse = finalResponse.replace('{schedule_today}', 
-            hasNoClasses 
-              ? 'You have no classes today!' 
-              : this.formatScheduleResponse(scheduleData, 'today')
-          );
+    // --- ЗАВДАННЯ ---
+    if (responseTemplate.includes('{tasks_count}')) {
+        try {
+            const tasks = await this.fetchTasks();
+            const pending = tasks.filter(t => t.status !== 'completed');
+            const todayTasks = await this.fetchTodayTasks();
+            
+            return responseTemplate
+                .replace('{tasks_count}', pending.length.toString())
+                .replace('{tasks_today}', todayTasks.length.toString());
+        } catch (e) {
+            return "I couldn't access your tasks. Please login.";
         }
-
-        if (responseTemplate.includes('{schedule_tomorrow}')) {
-          const scheduleData = await this.fetchTomorrowSchedule();
-          const hasNoClasses = (scheduleData as ScheduleResponse).message === 'No classes tomorrow' || 
-                              !scheduleData.classes?.length;
-          finalResponse = finalResponse.replace('{schedule_tomorrow}', 
-            hasNoClasses 
-              ? 'You have no classes tomorrow!' 
-              : this.formatScheduleResponse(scheduleData, 'tomorrow')
-          );
-        }
-
-        return finalResponse;
-      } catch (error) {
-        console.error('Error fetching schedule data:', error);
-        return responseTemplate;
-      }
     }
 
     return responseTemplate;
-  },
+  }
 
-  async fetchTasks(): Promise<Task[]> {
-    const response = await fetch(`${API_BASE_URL}/tasks`);
-    const data = await response.json();
-    // Обробляємо випадок, коли API повертає об'єкт з message
-    return Array.isArray(data) ? data : (data.tasks || []);
-  },
+  // === 3. API ЗАПИТИ (З АВТОРИЗАЦІЄЮ) ===
 
-  async fetchTodayTasks(): Promise<Task[]> {
-    const response = await fetch(`${API_BASE_URL}/tasks/today`);
-    const data = await response.json();
-    return Array.isArray(data) ? data : (data.tasks || []);
-  },
+  async fetchScheduleForDay(day: string): Promise<ScheduleResponse> {
+    const weekType = this.getCurrentWeekType();
+    console.log(`🌐 Fetching schedule for ${day} (${weekType} week)`);
+    
+    // Використовуємо множину 'schedules', щоб відповідало бекенду
+    const url = `${API_BASE_URL}/schedule/all?week=${weekType}`;
+    
+    try {
+      const res = await fetch(url, {
+        headers: this.getHeaders() // 🔥 ДОДАНО ТОКЕН
+      });
 
-  async fetchUpcomingTasks(): Promise<Task[]> {
-    const response = await fetch(`${API_BASE_URL}/tasks/upcoming`);
-    const data = await response.json();
-    return Array.isArray(data) ? data : (data.tasks || []);
-  },
+      if (res.status === 401) throw new Error('Unauthorized');
+      if (!res.ok) throw new Error('Failed to fetch');
+      
+      const allSchedules = await res.json();
+      
+      const daySchedule = allSchedules.find((s: any) => 
+        s.dayOfWeek && s.dayOfWeek.toLowerCase() === day.toLowerCase()
+      );
 
-  async fetchOverdueTasks(): Promise<Task[]> {
-    const response = await fetch(`${API_BASE_URL}/tasks/overdue`);
-    const data = await response.json();
-    return Array.isArray(data) ? data : (data.tasks || []);
-  },
+      if (daySchedule) return daySchedule;
+      return { dayOfWeek: day, classes: [], message: 'No classes found' };
+      
+    } catch (error) {
+      console.error(error);
+      return { classes: [], message: 'Error fetching schedule' };
+    }
+  }
 
   async fetchTodaySchedule(): Promise<ScheduleResponse> {
-    const response = await fetch(`${API_BASE_URL}/schedule/today`);
-    return response.json();
-  },
+    try {
+        const res = await fetch(`${API_BASE_URL}/schedule/today`, {
+            headers: this.getHeaders() // 🔥 ДОДАНО ТОКЕН
+        });
+        if (!res.ok) throw new Error('Fetch failed');
+        return await res.json();
+    } catch (e) {
+        return { classes: [], message: 'Error' };
+    }
+  }
 
   async fetchTomorrowSchedule(): Promise<ScheduleResponse> {
-    const response = await fetch(`${API_BASE_URL}/schedule/tomorrow`);
-    return response.json();
-  },
-
-  formatTasksList(tasks: Task[], type: string): string {
-    if (!tasks.length) return '';
-
-    let response = `📝 Your ${type} tasks:\n\n`;
-    
-    tasks.forEach((task, index) => {
-      const dueDate = new Date(task.dueDate).toLocaleDateString();
-      response += `${index + 1}. ${task.title}\n`;
-      response += `   📅 Due: ${dueDate}\n`;
-      response += `   ⚡ Priority: ${task.priority}\n`;
-      response += `   📊 Status: ${task.status}\n`;
-      if (task.subject) {
-        response += `   📚 Subject: ${task.subject}\n`;
-      }
-      response += `\n`;
-    });
-    
-    return response;
-  },
-
-  formatScheduleResponse(schedule: Schedule, day: string): string {
-    if (!schedule.classes?.length) return `No classes ${day}.`;
-    
-    let response = `📚 Schedule for ${day}:\n\n`;
-    schedule.classes.forEach((classItem, index) => {
-      response += `${index + 1}. ${classItem.subject} (${classItem.startTime}-${classItem.endTime})`;
-      if (classItem.room) response += ` in ${classItem.room}`;
-      response += `\n`;
-    });
-    
-    return response;
+    try {
+        const res = await fetch(`${API_BASE_URL}/schedule/tomorrow`, {
+            headers: this.getHeaders() // 🔥 ДОДАНО ТОКЕН
+        });
+        if (!res.ok) throw new Error('Fetch failed');
+        return await res.json();
+    } catch (e) {
+        return { classes: [], message: 'Error' };
+    }
   }
-};
+
+  // --- TASKS API ---
+  async fetchTasks(): Promise<Task[]> {
+    try {
+        const res = await fetch(`${API_BASE_URL}/tasks`, {
+            headers: this.getHeaders() // 🔥 ДОДАНО ТОКЕН
+        });
+        const data = await res.json();
+        return Array.isArray(data) ? data : (data.tasks || []);
+    } catch (e) { return []; }
+  }
+
+  async fetchTodayTasks(): Promise<Task[]> {
+      try {
+        const res = await fetch(`${API_BASE_URL}/tasks/today`, {
+            headers: this.getHeaders() // 🔥 ДОДАНО ТОКЕН
+        });
+        const data = await res.json();
+        return Array.isArray(data) ? data : (data.tasks || []);
+      } catch (e) { return []; }
+  }
+
+  // === 4. ФОРМАТУВАННЯ ===
+  formatScheduleResponse(schedule: ScheduleResponse, dayLabel: string): string {
+    if (!schedule.classes || schedule.classes.length === 0) {
+      return `Relax! No classes for ${dayLabel}.`;
+    }
+
+    let text = `📅 ${dayLabel}:\n`; 
+    
+    schedule.classes.forEach((c, i) => {
+      text += `\n${i + 1}. ${c.subject}`;
+      if (c.type) text += ` (${c.type})`;
+      text += `\n   🕒 ${c.startTime} - ${c.endTime}`;
+      if (c.teacher) text += ` | 👨‍🏫 ${c.teacher}`;
+    });
+
+    return text.trim();
+  }
+}
+
+const responseService = new ResponseService();
+export default responseService;

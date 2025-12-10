@@ -6,7 +6,7 @@ import cors from 'cors';
 import assistantRoutes from './routes/assistantResponses.js';
 import scheduleRoutes from './routes/schedule.js';
 import taskRoutes from './routes/tasks.js';
-import authRoutes from './routes/auth.ts'; // твій роутер auth
+import authRoutes from './routes/auth.js'; // твій роутер auth
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -25,7 +25,7 @@ mongoose.connect('mongodb://localhost:27017/Philly', {
 
 // Маршрути
 app.use('/api/responses', assistantRoutes);
-app.use('/api/schedules', scheduleRoutes);
+app.use('/api/schedule', scheduleRoutes);
 app.use('/api/tasks', taskRoutes);
 app.use('/api/auth', authRoutes); // тут логін/реєстрація через MongoDB
 

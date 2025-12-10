@@ -78,14 +78,14 @@
 }
 
 
-// Центральна GIF миші
+// Центральна GIF миші (збільшена)
 .mouse-gif {
   position: absolute;
-  top: 60%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 500px;
-  height: 500px;
+  width: 550px; /* ЗБІЛЬШЕНО */
+  height: 550px; /* ЗБІЛЬШЕНО */
   z-index: 5;
   pointer-events: none;
 
@@ -99,6 +99,7 @@
 
 .quick-questions {
   display: flex;
+  justify-content: center; /* ВИПРАВЛЕНО: вирівнює кнопки по центру */
   align-items: center;
   flex-wrap: nowrap; /* щоб всі кнопки були в один ряд */
   gap: 8px; /* відстань між кнопками */
@@ -106,7 +107,7 @@
 }
 
 .quick-questions button {
-  background-color: #4da6ff; /* блакитний */
+  background-color: #FDA4AF; /* ВИПРАВЛЕНО: гарний рожевий колір */
   color: white;
   border: none;
   border-radius: 50px; /* повністю круглі кнопки */
@@ -120,6 +121,10 @@
   transition: background-color 0.2s, transform 0.1s;
   padding: 0; /* прибираємо внутрішні відступи */
   flex-shrink: 0; /* щоб кнопки не стискались */
+  
+  &:hover {
+    background-color: #F472B6; /* Трохи темніший рожевий при наведенні */
+  }
 }
 
 

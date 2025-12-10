@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 
 const scheduleSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   dayOfWeek: {
     type: String,
     required: true,
@@ -43,7 +48,8 @@ const scheduleSchema = new mongoose.Schema({
   collection: 'Schedules'
 });
 
-// Індекс для швидкого пошуку за датою та днем тижня
-scheduleSchema.index({ date: 1, dayOfWeek: 1 });
+// Індекси
+scheduleSchema.index({ user: 1, date: 1 });
+scheduleSchema.index({ user: 1, dayOfWeek: 1 });
 
 export default mongoose.model('Schedule', scheduleSchema);

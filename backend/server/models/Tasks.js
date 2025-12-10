@@ -1,6 +1,11 @@
 import mongoose from 'mongoose';
 
 const taskSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true
+  },
   title: {
     type: String,
     required: true,
@@ -34,7 +39,7 @@ const taskSchema = new mongoose.Schema({
     trim: true
   },
   estimatedTime: {
-    type: Number, // in minutes
+    type: Number, // в хвилинах
     default: 0
   },
   isRecurring: {
@@ -59,9 +64,8 @@ const taskSchema = new mongoose.Schema({
   collection: 'Tasks'
 });
 
-// Індекси для швидкого пошуку
-taskSchema.index({ dueDate: 1, priority: -1 });
-taskSchema.index({ status: 1, dueDate: 1 });
-taskSchema.index({ category: 1, subject: 1 });
+// Індекси
+taskSchema.index({ user: 1, dueDate: 1 });
+taskSchema.index({ user: 1, status: 1 });
 
 export default mongoose.model('Tasks', taskSchema);

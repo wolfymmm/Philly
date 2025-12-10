@@ -37,7 +37,7 @@ function Shedule() {
         const weekParam = weekType === 1 ? "odd" : "even";
 
         const res = await axios.get<ScheduleDoc[]>(
-          `http://localhost:5000/api/schedules/all?week=${weekParam}`
+          `http://localhost:5000/api/schedule/all?week=${weekParam}`
         );
 
         const grouped: Record<string, ClassItem[]> = {};
@@ -69,7 +69,7 @@ function Shedule() {
   const handleSave = async () => {
     try {
       for (const day of Object.keys(editBuffer)) {
-        await axios.put(`http://localhost:5000/api/schedules/update-day`, {
+        await axios.put(`http://localhost:5000/api/schedule/update-day`, {
           dayOfWeek: day,
           classes: editBuffer[day],
           weekType: weekType === 1 ? "odd" : "even",

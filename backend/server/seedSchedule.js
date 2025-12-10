@@ -1,8 +1,11 @@
 import mongoose from 'mongoose';
-import Schedule from './models/Schedule.js';
+import Schedule from './models/Schedule.js'; // Перевір, чи правильний шлях до моделі
 import dotenv from 'dotenv';
 
 dotenv.config();
+
+// ID користувача (Яна Марусіна), до якого прив'язуємо розклад
+const userId = '693893a31b6ea7e676719b31';
 
 const dayNames = ['monday','tuesday','wednesday','thursday','friday','saturday','sunday'];
 
@@ -64,8 +67,8 @@ const seedSchedule = async () => {
     await mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/Philly');
     console.log('✅ Connected to database');
 
-    // Очистка колекції
-    await Schedule.deleteMany({});
+    // Очищаємо розклад (можна видаляти тільки для цього юзера, але поки чистимо все для тесту)
+    await Schedule.deleteMany({}); 
     console.log('🧹 Schedule collection cleared');
 
     const today = new Date();
@@ -102,6 +105,7 @@ const seedSchedule = async () => {
 
         // Створюємо запис розкладу
         savedSchedules.push({
+          user: userId, // <--- 🔥 ДОДАНО ПРИВ'ЯЗКУ ДО КОРИСТУВАЧА
           dayOfWeek: dayName,
           date: date,
           weekNumber: weekNumber,
@@ -114,7 +118,7 @@ const seedSchedule = async () => {
     // Вставляємо всі дані в базу
     await Schedule.insertMany(savedSchedules);
     
-    console.log(`✅ Added ${savedSchedules.length} schedule days`);
+    console.log(`✅ Added ${savedSchedules.length} schedule days for user ${userId}`);
     console.log(`📅 Current week number: ${currentWeekNumber}`);
     
     // Підраховуємо загальну кількість занять
