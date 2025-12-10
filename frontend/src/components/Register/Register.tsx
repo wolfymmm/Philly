@@ -1,27 +1,59 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
-import logo from '../../../public/PhillyLogo.svg';
 import './Register.scss';
 
 const Register: React.FC = () => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
+    const [firstName, setFirstName] = useState(''); // ДОДАНО
+    const [lastName, setLastName] = useState(''); // ДОДАНО
     const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
+        
+        // Валідація
+        if (!email || !password) {
+            setError('Email and password are required');
+            return;
+        }
+        
         if (password !== confirmPassword) {
             setError('Passwords do not match');
             return;
         }
+        
+        if (password.length < 6) {
+            setError('Password must be at least 6 characters');
+            return;
+        }
+        
+        if (!email.includes('@')) {
+            setError('Please enter a valid email');
+            return;
+        }
+
+        setIsLoading(true);
+        setError('');
+        
         try {
-            await axios.post('http://localhost:5000/api/auth/register', { username, password });
+            await axios.post('http://localhost:5000/api/auth/register', { 
+                email,
+                password,
+                firstName,
+                lastName
+            });
             navigate('/login');
-        } catch (err) {
-            setError('Registration error. Please try a different username.');
+        } catch (err: any) {
+            const errorMsg = err.response?.data?.message || 'Registration error';
+            setError(errorMsg);
+            console.error('Registration error:', err.response?.data);
+        } finally {
+            setIsLoading(false);
         }
     };
 
@@ -30,33 +62,63 @@ const Register: React.FC = () => {
             <div className="register-card">
                 <div className="register-header">
                     <h2>Create Account</h2>
+                    <p>Please fill in all fields</p>
                 </div>
                 <form onSubmit={handleSubmit} className="register-form">
                     {error && <div className="error-message">{error}</div>}
+                    
                     <div className="form-group">
-                        <label htmlFor="username">Username</label>
+                        <label htmlFor="firstName">First Name</label>
                         <input
-                            id="username"
+                            id="firstName"
                             type="text"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
-                            required
-                            placeholder="Enter your username"
+                            value={firstName}
+                            onChange={(e) => setFirstName(e.target.value)}
+                            placeholder="Enter your first name (optional)"
+                            disabled={isLoading}
                         />
                     </div>
+                    
                     <div className="form-group">
-                        <label htmlFor="password">Password</label>
+                        <label htmlFor="lastName">Last Name</label>
+                        <input
+                            id="lastName"
+                            type="text"
+                            value={lastName}
+                            onChange={(e) => setLastName(e.target.value)}
+                            placeholder="Enter your last name (optional)"
+                            disabled={isLoading}
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="email">Email *</label>
+                        <input
+                            id="email"
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            placeholder="Enter your email"
+                            disabled={isLoading}
+                        />
+                    </div>
+                    
+                    <div className="form-group">
+                        <label htmlFor="password">Password *</label>
                         <input
                             id="password"
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
-                            placeholder="Enter your password"
+                            placeholder="Enter your password (min 6 characters)"
+                            disabled={isLoading}
                         />
                     </div>
+                    
                     <div className="form-group">
-                        <label htmlFor="confirmPassword">Confirm Password</label>
+                        <label htmlFor="confirmPassword">Confirm Password *</label>
                         <input
                             id="confirmPassword"
                             type="password"
@@ -64,9 +126,17 @@ const Register: React.FC = () => {
                             onChange={(e) => setConfirmPassword(e.target.value)}
                             required
                             placeholder="Confirm your password"
+                            disabled={isLoading}
                         />
                     </div>
-                    <button type="submit" className="register-btn">Register</button>
+                    
+                    <button 
+                        type="submit" 
+                        className="register-btn"
+                        disabled={isLoading}
+                    >
+                        {isLoading ? 'Registering...' : 'Register'}
+                    </button>
                 </form>
                 <div className="register-footer">
                     <p>Already have an account? <Link to="/login">Log In</Link></p>

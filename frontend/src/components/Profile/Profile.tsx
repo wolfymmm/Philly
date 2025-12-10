@@ -1,110 +1,204 @@
+// Profile.tsx (оновлена версія без username)
 import { useContext, useState } from 'react';
 import { AuthContext } from '../AuthContext/AuthContext';
 import axios from 'axios';
 import './Profile.scss';
 
 const AVAILABLE_AVATARS = [
-  'https://i.pravatar.cc/150?img=1',
-  'https://i.pravatar.cc/150?img=2',
-  'https://i.pravatar.cc/150?img=3',
-  'https://i.pravatar.cc/150?img=4',
-  'https://i.pravatar.cc/150?img=5'
+  '/pig.svg',
+  '/cat.svg',
+  '/dog.svg',
+  '/fox.svg',
+  '/deer.svg',
+  '/panda.svg',
+  '/rook.svg',
+  '/cow.svg'
 ];
 
 export default function Profile() {
   const { user, setUser, logout } = useContext(AuthContext);
-
   const [editing, setEditing] = useState(false);
-  const [username, setUsername] = useState(user?.username || '');
+  const [showAvatarSelect, setShowAvatarSelect] = useState(false);
+  const [firstName, setFirstName] = useState(user?.firstName || '');
+  const [lastName, setLastName] = useState(user?.lastName || '');
   const [email, setEmail] = useState(user?.email || '');
-  const [avatar, setAvatar] = useState(user?.avatar || '');
+  const [avatar, setAvatar] = useState(user?.avatar || '/pig.svg');
   const [message, setMessage] = useState('');
+  const [messageType, setMessageType] = useState<'success' | 'error'>('success');
 
   if (!user) {
     return <p className="not-logged">You are not logged in.</p>;
   }
 
-  const handleAvatarSelect = (url: string) => {
-    setAvatar(url);
+  const handleAvatarSelect = (avatarPath: string) => {
+    setAvatar(avatarPath);
+    setShowAvatarSelect(false);
   };
 
   const handleSave = async () => {
     try {
+      const token = localStorage.getItem('token');
       const res = await axios.put(
         'http://localhost:5000/api/auth/profile',
-        { username, email, avatar },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+        { 
+          firstName, 
+          lastName, 
+          email, 
+          avatar 
+        },
+        { 
+          headers: { 
+            Authorization: `Bearer ${token}` 
+          } 
+        }
       );
-      setUser(res.data);
-      setMessage('Profile updated successfully');
+      
+      setUser(res.data.user);
+      setMessage('Profile updated successfully!');
+      setMessageType('success');
       setEditing(false);
-    } catch (err) {
-      console.error(err);
-      setMessage('Failed to update profile');
+      setShowAvatarSelect(false);
+      
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
+      
+    } catch (err: any) {
+      console.error('Profile update error:', err);
+      setMessage(err.response?.data?.message || 'Failed to update profile');
+      setMessageType('error');
     }
+  };
+
+  const handleCancel = () => {
+    setFirstName(user?.firstName || '');
+    setLastName(user?.lastName || '');
+    setEmail(user?.email || '');
+    setAvatar(user?.avatar || '/pig.svg');
+    setEditing(false);
+    setShowAvatarSelect(false);
+    setMessage('');
+  };
+
+  const toggleAvatarSelect = () => {
+    setShowAvatarSelect(!showAvatarSelect);
   };
 
   return (
     <div className="profile-container">
       <h2 className="profile-title">Profile</h2>
 
-      <div className="profile-avatar">
-        <img src={avatar} alt="Avatar" />
-      </div>
+      <div className="profile-content">
+        <div className="profile-avatar-section">
+          <img 
+            className="main-avatar"
+            src={avatar || '/pig.svg'} 
+            alt="Avatar" 
+            onError={(e) => {
+              e.currentTarget.src = '/pig.svg';
+            }}
+          />
+          
+          {editing && (
+            <button 
+              className="avatar-edit-btn"
+              onClick={toggleAvatarSelect}
+            >
+              {showAvatarSelect ? 'Hide Avatars' : 'Change Avatar'}
+            </button>
+          )}
 
-      {editing && (
-        <div className="avatar-selection">
-          <h4>Choose an avatar:</h4>
-          <div className="avatars-grid">
-            {AVAILABLE_AVATARS.map(url => (
-              <img
-                key={url}
-                src={url}
-                alt="avatar"
-                className={`avatar-item ${avatar === url ? 'selected' : ''}`}
-                onClick={() => handleAvatarSelect(url)}
+          {editing && showAvatarSelect && (
+            <div className="avatar-selection">
+              <h4>Choose Avatar</h4>
+              <div className="avatars-grid">
+                {AVAILABLE_AVATARS.map((avatarPath, index) => (
+                  <img
+                    key={index}
+                    src={avatarPath}
+                    alt={`avatar-${index + 1}`}
+                    className={`avatar-item ${avatar === avatarPath ? 'selected' : ''}`}
+                    onClick={() => handleAvatarSelect(avatarPath)}
+                    onError={(e) => {
+                      e.currentTarget.src = '/pig.svg';
+                    }}
+                  />
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="profile-info-section">
+          {message && (
+            <div className={`profile-message ${messageType}`}>
+              {message}
+            </div>
+          )}
+
+          <div className="profile-info-grid">
+            <div className="profile-info-field">
+              <label>First Name</label>
+              <input
+                type="text"
+                value={firstName}
+                disabled={!editing}
+                onChange={e => setFirstName(e.target.value)}
+                placeholder="First name"
               />
-            ))}
+            </div>
+
+            <div className="profile-info-field">
+              <label>Last Name</label>
+              <input
+                type="text"
+                value={lastName}
+                disabled={!editing}
+                onChange={e => setLastName(e.target.value)}
+                placeholder="Last name"
+              />
+            </div>
+
+            <div className="profile-info-field">
+              <label>Email</label>
+              <input
+                type="email"
+                value={email}
+                disabled={!editing}
+                onChange={e => setEmail(e.target.value)}
+                placeholder="Email"
+              />
+            </div>
+          </div>
+
+          <div className="profile-buttons">
+            {editing ? (
+              <>
+                <button className="btn save" onClick={handleSave}>
+                  Save Changes
+                </button>
+                <button className="btn cancel" onClick={handleCancel}>
+                  Cancel
+                </button>
+              </>
+            ) : (
+              <>
+                <button 
+                  className="btn edit" 
+                  onClick={() => {
+                    setEditing(true);
+                    setMessage('');
+                  }}
+                >
+                  Edit Profile
+                </button>
+                <button className="btn logout" onClick={logout}>
+                  Logout
+                </button>
+              </>
+            )}
           </div>
         </div>
-      )}
-
-      <div className="profile-info">
-        <label>
-          Username:
-          <input
-            type="text"
-            value={username}
-            disabled={!editing}
-            onChange={e => setUsername(e.target.value)}
-          />
-        </label>
-
-        <label>
-          Email:
-          <input
-            type="email"
-            value={email}
-            disabled={!editing}
-            onChange={e => setEmail(e.target.value)}
-          />
-        </label>
-      </div>
-
-      {message && <p className="profile-message">{message}</p>}
-
-      <div className="profile-buttons">
-        {editing ? (
-          <>
-            <button className="btn save" onClick={handleSave}>Save</button>
-            <button className="btn cancel" onClick={() => setEditing(false)}>Cancel</button>
-          </>
-        ) : (
-          <>
-            <button className="btn edit" onClick={() => setEditing(true)}>Edit Profile</button>
-            <button className="btn logout" onClick={logout}>Logout</button>
-          </>
-        )}
       </div>
     </div>
   );
