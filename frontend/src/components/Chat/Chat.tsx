@@ -9,6 +9,8 @@ import { QuickQuestions } from '../../components/QuickQuestions/QuickQuestions';
 import { InputArea } from '../../components/InputArea/InputArea';
 import { StatusIndicators } from '../../components/StatusIndicators/StatusIndicators';
 import { ListeningOverlay } from '../../components/ListeningOverlay/ListeningOverlay';
+import { useContext } from 'react';
+import { AuthContext } from '../AuthContext/AuthContext';
 import { API_BASE_URL } from '../../types/types';
 import './Chat.scss';
 
@@ -21,6 +23,7 @@ const Chat: React.FC = () => {
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
+  
   const { isSpeaking, speak } = useSpeechSynthesis();
   
   const handleVoiceResult = (transcript: string) => {
@@ -30,6 +33,7 @@ const Chat: React.FC = () => {
 
   const { isListening, startListening, stopListening } = useSpeechRecognition(handleVoiceResult);
   const { assistantResponses } = useAssistantResponses();
+  const { user } = useContext(AuthContext);
 
   // Додайте цей useEffect для відладки
   useEffect(() => {
@@ -230,7 +234,15 @@ const Chat: React.FC = () => {
       
       <div className="chat-container">
         <div className="chat-header">
-          <h2>Hi! Can I help you today?</h2>
+          <h2>
+          {user?.firstName ? (
+            <>
+              Hi, <span className="user-name-gradient">{user.firstName}</span>! Can I help you today?
+            </>
+          ) : (
+            "Hi! Can I help you today?"
+          )}
+        </h2>
         </div>
 
         <MessageList messages={messages} messagesEndRef={messagesEndRef} />

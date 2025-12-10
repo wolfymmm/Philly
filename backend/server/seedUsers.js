@@ -1,54 +1,90 @@
-// seedUsers.ts
 import mongoose from 'mongoose';
-import User from './models/User.ts'; // перевір, щоб шлях збігався
+import dotenv from 'dotenv';
+import bcrypt from 'bcryptjs';
+import User from './models/User.js'; 
 
-const MONGO_URI = 'mongodb://localhost:27017/Philly'; // твоя база
+dotenv.config();
 
-const users = [
+const usersToSeed = [
   {
-    username: 'admin',
+    email: 'test.user@example.com',
+    password: 'password123',
+    firstName: 'Test',
+    lastName: 'User',
+    avatar: '/pig.svg'
+  },
+  {
     email: 'admin@example.com',
-    password: '123456',
-    avatar: 'https://i.pravatar.cc/150?img=1'
+    password: 'adminpassword',
+    firstName: 'Admin',
+    lastName: 'System',
+    avatar: '/cow.svg'
   },
   {
-    username: 'yana',
-    email: 'yana@example.com',
-    password: '123',
-    avatar: 'https://i.pravatar.cc/150?img=2'
-  },
-  {
-    username: 'max',
-    email: 'max@example.com',
-    password: 'qwerty123',
-    avatar: 'https://i.pravatar.cc/150?img=3'
+    email: 'max.student@gmail.com',
+    password: '12345678',
+    firstName: 'Max',
+    lastName: 'Tereshchuk',
+    avatar: '/pig.svg'
   }
 ];
 
-async function seedUsers() {
+const seedUsers = async () => {
   try {
-    await mongoose.connect(MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-    console.log('Connected to MongoDB');
+    await mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/Philly');
+    console.log('✅ Connected to database');
 
-    // Очистка колекції перед вставкою
-    await User.deleteMany({});
-    console.log('Users collection cleared');
-
-    // Додаємо користувачів
-    for (const user of users) {
-      await User.create(user);
-      console.log(`User ${user.username} created`);
+    // 🔥 ВИПРАВЛЕННЯ ПОМИЛКИ: Видаляємо старий індекс username, якщо він є
+    try {
+      await User.collection.dropIndex('username_1');
+      console.log('🗑️  Old "username" index dropped successfully');
+    } catch (err) {
+      // Якщо індексу немає, просто ігноруємо помилку
+      if (err.code !== 27) {
+        console.log('ℹ️  No old "username" index found or other error (skipping)');
+      }
     }
 
-    console.log('Seeding complete');
+    let addedCount = 0;
+    let skippedCount = 0;
+
+    for (const user of usersToSeed) {
+      // 1. Перевіряємо, чи існує користувач
+      const existingUser = await User.findOne({ email: user.email });
+
+      if (existingUser) {
+        console.log(`⚠️ User with email ${user.email} already exists. Skipping.`);
+        skippedCount++;
+        continue;
+      }
+
+      // 2. Хешуємо пароль
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(user.password, salt);
+
+      // 3. Створюємо
+      const newUser = new User({
+        ...user,
+        password: hashedPassword
+      });
+
+      await newUser.save();
+      console.log(`✅ Added user: ${user.email}`);
+      addedCount++;
+    }
+
+    console.log(`\n🏁 Seeding finished.`);
+    console.log(`Total added: ${addedCount}`);
+    console.log(`Total skipped: ${skippedCount}`);
+
+    await mongoose.connection.close();
+    console.log('🔌 Connection closed');
     process.exit(0);
-  } catch (err) {
-    console.error(err);
+
+  } catch (error) {
+    console.error('❌ Error seeding users:', error);
     process.exit(1);
   }
-}
+};
 
 seedUsers();

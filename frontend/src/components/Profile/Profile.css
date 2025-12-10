@@ -1,7 +1,8 @@
+@charset "UTF-8";
 .profile-container {
   grid-column: 1/-1;
   padding: 30px 20px 50px;
-  max-width: 800px;
+  width: 1000px;
   margin: 0 auto;
 }
 .profile-container .profile-title {
@@ -274,4 +275,56 @@
     width: 45px;
     height: 45px;
   }
+}
+.profile-info-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  margin-bottom: 30px;
+}
+@media (max-width: 768px) {
+  .profile-info-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}
+@media (max-width: 480px) {
+  .profile-info-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+}
+
+.profile-info-field {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.profile-info-field label {
+  font-size: 14px;
+  font-weight: 500;
+  color: #1f2937;
+}
+.profile-info-field input {
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 400;
+  padding: 14px 20px;
+  border: 1px solid #ddd;
+  border-radius: 30px;
+  background: #FAFAFA;
+  transition: all 0.3s ease;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box; /* Додаємо цю властивість */
+}
+.profile-info-field input:focus {
+  border-color: #FDA4AF;
+  box-shadow: 0 0 0 3px rgba(253, 164, 175, 0.2);
+  background: white;
+}
+.profile-info-field input:disabled {
+  background: #f5f5f5;
+  color: #717182;
+  cursor: not-allowed;
 }/*# sourceMappingURL=Profile.css.map */

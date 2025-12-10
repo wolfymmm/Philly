@@ -1,6 +1,6 @@
 import express from 'express';
 import Schedule from '../models/Schedule.js';
-import auth from '../middleware/auth.js'; // 🔥 Імпорт middleware
+import auth from '../middleware/auth.js'; 
 
 const router = express.Router();
 
@@ -27,7 +27,7 @@ const getAcademicWeekType = (dateToCheck) => {
   return weeksPassed % 2 === 0 ? 'odd' : 'even';
 };
 
-// GET /today - Розклад на сьогодні для поточного юзера
+// GET /today - Розклад на сьогодні
 router.get('/today', async (req, res) => {
   try {
     const today = new Date();
@@ -38,9 +38,8 @@ router.get('/today', async (req, res) => {
 
     console.log(`[API] User ${req.user.email} checking TODAY: ${dayOfWeek} (${weekType})`);
 
-    // 🔥 ФІЛЬТР: user: req.user.id
     const schedule = await Schedule.findOne({
-      user: req.user.id, // Тільки для цього юзера
+      user: req.user.id, 
       dayOfWeek: dayOfWeek,
       weekNumber: { $mod: [2, isOddWeek ? 1 : 0] } 
     });
@@ -55,7 +54,7 @@ router.get('/today', async (req, res) => {
   }
 });
 
-// GET /tomorrow - Розклад на завтра для поточного юзера
+// GET /tomorrow - Розклад на завтра
 router.get('/tomorrow', async (req, res) => {
   try {
     const tomorrow = new Date();
@@ -67,7 +66,6 @@ router.get('/tomorrow', async (req, res) => {
 
     console.log(`[API] User ${req.user.email} checking TOMORROW: ${dayOfWeek} (${weekType})`);
 
-    // 🔥 ФІЛЬТР: user: req.user.id
     const schedule = await Schedule.findOne({
       user: req.user.id,
       dayOfWeek: dayOfWeek,
@@ -83,19 +81,18 @@ router.get('/tomorrow', async (req, res) => {
   }
 });
 
-// GET /all - Весь розклад поточного юзера (з фільтром по тижню)
+// GET /all - Весь розклад (фільтр по тижню)
 router.get('/all', async (req, res) => {
   try {
     const { week } = req.query; // 'odd' або 'even'
-    
-    // 🔥 Початковий фільтр: ТІЛЬКИ цей юзер
     let filter = { user: req.user.id };
 
     console.log(`[API] Fetching ALL schedules for user ${req.user.email}. Week: ${week}`);
 
     if (week) {
       const isOddRequested = week.toLowerCase() === 'odd';
-      // Додаємо фільтр по тижню
+      // $mod: [2, 1] -> непарні (1, 3, 5...)
+      // $mod: [2, 0] -> парні (0, 2, 4...)
       filter.weekNumber = { $mod: [2, isOddRequested ? 1 : 0] };
     }
 
@@ -107,12 +104,45 @@ router.get('/all', async (req, res) => {
   }
 });
 
-// POST / - Створити запис розкладу (прив'язаний до юзера)
+// 🔥 PUT /update-day - Оновлення розкладу (для кнопки Save на фронтенді)
+router.put('/update-day', async (req, res) => {
+  try {
+    // Frontend надсилає: dayOfWeek ('monday'), classes ([...]), weekType ('odd')
+    const { dayOfWeek, classes, weekType } = req.body;
+    
+    if (!dayOfWeek || !weekType) {
+        return res.status(400).json({ message: 'Missing dayOfWeek or weekType' });
+    }
+
+    const isOdd = weekType === 'odd';
+    console.log(`[API] Updating ${dayOfWeek} (${weekType}) for user ${req.user.email}`);
+
+    // Оновлюємо ВСІ записи в базі, які відповідають цьому дню і типу тижня
+    // Наприклад: Оновити всі "Понеділки" на "Непарних" тижнях
+    const result = await Schedule.updateMany(
+      { 
+        user: req.user.id,
+        dayOfWeek: dayOfWeek.toLowerCase(),
+        weekNumber: { $mod: [2, isOdd ? 1 : 0] } 
+      },
+      { 
+        $set: { classes: classes } 
+      }
+    );
+
+    res.json({ success: true, updatedCount: result.modifiedCount });
+  } catch (err) {
+    console.error('Update error:', err);
+    res.status(500).json({ message: 'Error updating schedule' });
+  }
+});
+
+// POST / - Створити один конкретний запис (якщо треба)
 router.post('/', async (req, res) => {
   try {
     const newSchedule = new Schedule({
       ...req.body,
-      user: req.user.id // 🔥 Автоматична прив'язка
+      user: req.user.id
     });
 
     const savedSchedule = await newSchedule.save();

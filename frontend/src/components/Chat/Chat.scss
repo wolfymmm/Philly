@@ -24,6 +24,23 @@
     margin: 0;
     font-weight: 600;
   }
+
+  .user-name-gradient {
+  /* 1. Задаємо градієнт (можете змінити кольори на свій смак) */
+  background: linear-gradient(90deg, #72b4ff 0%, #f4a0b2 50%, #ff8eaa 100%);
+  
+  /* 2. Стандартна техніка для тексту-градієнта */
+  -webkit-background-clip: text;
+  background-clip: text;
+  
+  /* 3. Робимо колір тексту прозорим, щоб просвічувався фон */
+  color: transparent;
+  /* Для підтримки Safari/Chrome іноді потрібна ця властивість: */
+  -webkit-text-fill-color: transparent;
+
+  /* 4. Жирний шрифт, щоб градієнт було краще видно */
+  font-weight: 700; 
+}
 }
 
 .message p {
