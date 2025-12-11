@@ -2,7 +2,7 @@
 .about-container {
   grid-column: 1/-1;
   padding: 40px 20px;
-  max-width: 900px;
+  max-width: 1100px;
   margin: 0 auto;
   animation: fadeIn 0.8s ease-in;
 }
@@ -19,11 +19,11 @@
 
 .about-header {
   text-align: center;
-  margin-bottom: 40px;
+  margin-bottom: 50px;
 }
 .about-header h1 {
   font-weight: 600;
-  font-size: 42px;
+  font-size: 48px;
   color: #1f2937;
   margin-bottom: 15px;
   position: relative;
@@ -34,240 +34,313 @@
   bottom: -10px;
   left: 50%;
   transform: translateX(-50%);
-  width: 60px;
+  width: 80px;
   height: 3px;
-  background: linear-gradient(135deg, #FDA4AF 0%, #9F1239 100%);
+  background: linear-gradient(135deg, #FDA4AF 0%, #7dcbff 100%);
   border-radius: 2px;
 }
 .about-header .about-subtitle {
-  font-size: 18px;
+  font-size: 20px;
   color: #717182;
-  max-width: 600px;
-  margin: 20px auto 0;
+  max-width: 700px;
+  margin: 25px auto 0;
   line-height: 1.6;
 }
 
 .about-mission {
-  background: linear-gradient(135deg, #FDF2F8 0%, #FFFBEB 100%);
+  background: linear-gradient(135deg, #FDF2F8 0%, #e2f3fe 100%);
   border-radius: 20px;
-  padding: 30px;
-  margin-bottom: 40px;
+  padding: 35px 40px;
+  margin-bottom: 50px;
 }
 .about-mission h2 {
   font-weight: 600;
-  font-size: 24px;
+  font-size: 28px;
   color: #1f2937;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 .about-mission h2::before {
-  content: "🎯";
-  font-size: 20px;
+  content: "💡";
+  font-size: 24px;
 }
 .about-mission p {
-  font-size: 16px;
+  font-size: 18px;
   color: #4b5563;
-  line-height: 1.6;
+  line-height: 1.7;
   margin: 0;
+  max-width: 800px;
 }
 
 .features-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 25px;
-  margin-bottom: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-bottom: 50px;
 }
 
 .feature-card {
   background: white;
-  border-radius: 15px;
-  padding: 25px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  border-radius: 18px;
+  padding: 30px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.07);
   transition: all 0.3s ease;
   border: 1px solid #f0f0f0;
 }
 .feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(253, 164, 175, 0.15);
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(253, 164, 175, 0.2);
   border-color: #FDA4AF;
 }
 .feature-card .feature-icon {
-  font-size: 36px;
-  margin-bottom: 20px;
+  font-size: 42px;
+  margin-bottom: 25px;
   display: inline-block;
 }
 .feature-card h3 {
   font-weight: 600;
-  font-size: 20px;
+  font-size: 22px;
   color: #1f2937;
-  margin-bottom: 12px;
+  margin-bottom: 15px;
 }
 .feature-card p {
-  font-size: 14px;
+  font-size: 16px;
   color: #717182;
-  line-height: 1.5;
+  line-height: 1.6;
   margin: 0;
 }
 
 .how-it-works {
-  background: #FAFAFA;
   border-radius: 20px;
-  padding: 30px;
-  margin-bottom: 40px;
+  padding: 40px;
+  margin-bottom: 50px;
 }
 .how-it-works h2 {
   font-weight: 600;
-  font-size: 24px;
+  font-size: 28px;
   color: #1f2937;
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .steps-container {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(4, 1fr); /* Змінено: 4 колонки в один ряд */
+  gap: 25px;
+  align-items: start;
+}
+@media (max-width: 1200px) {
+  .steps-container {
+    grid-template-columns: repeat(2, 1fr); /* 2 колонки на планшетах */
+    gap: 30px;
+  }
 }
 @media (max-width: 768px) {
   .steps-container {
-    grid-template-columns: 1fr;
-    gap: 25px;
+    grid-template-columns: 1fr; /* 1 колонка на мобільних */
+    gap: 35px;
   }
 }
 
 .step-item {
   text-align: center;
+  padding: 25px 20px;
+  transition: all 0.3s ease;
+}
+.step-item:hover {
+  transform: translateY(-5px);
 }
 .step-item .step-number {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   background: white;
-  border: 2px solid #FDA4AF;
+  border: 3px solid #FDA4AF;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: 600;
-  font-size: 20px;
-  color: #9F1239;
-  margin: 0 auto 15px;
-  box-shadow: 0 3px 10px rgba(253, 164, 175, 0.2);
+  font-size: 24px;
+  color: #4a4085;
+  margin: 0 auto 20px;
+  box-shadow: 0 4px 15px rgba(253, 164, 175, 0.25);
 }
 .step-item h4 {
   font-weight: 600;
-  font-size: 18px;
+  font-size: 20px;
   color: #1f2937;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 .step-item p {
-  font-size: 14px;
+  font-size: 15px;
   color: #717182;
-  line-height: 1.4;
+  line-height: 1.5;
+  max-width: 220px;
+  margin: 0 auto;
 }
 
 .cta-section {
   text-align: center;
-  padding: 30px;
-  background: linear-gradient(135deg, #FDF2F8 0%, #FFF5F7 100%);
+  padding: 40px;
+  background: linear-gradient(135deg, #d8e9ff 0%, #ffe5f2 100%);
   border-radius: 20px;
 }
 .cta-section h2 {
   font-weight: 600;
-  font-size: 24px;
+  font-size: 28px;
   color: #1f2937;
-  margin-bottom: 15px;
+  margin-bottom: 20px;
 }
 .cta-section p {
-  font-size: 16px;
+  font-size: 18px;
   color: #717182;
-  margin-bottom: 25px;
-  max-width: 500px;
+  margin-bottom: 30px;
+  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
+  line-height: 1.6;
 }
 .cta-section .cta-buttons {
   display: flex;
-  gap: 15px;
+  gap: 20px;
   justify-content: center;
 }
 @media (max-width: 480px) {
   .cta-section .cta-buttons {
     flex-direction: column;
     align-items: center;
+    gap: 15px;
   }
 }
 .cta-section .btn-primary {
   background: #FDA4AF;
-  border: 1px solid #FDA4AF;
+  border: 2px solid #FDA4AF;
   border-radius: 30px;
   color: #9F1239;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 17px;
+  font-weight: 600;
   cursor: pointer;
-  padding: 12px 30px;
+  padding: 15px 35px;
   transition: all 0.3s ease;
   text-decoration: none;
   display: inline-block;
+  min-width: 160px;
 }
 .cta-section .btn-primary:hover {
   background: #fe7777;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(253, 164, 175, 0.3);
+  border-color: #fe7777;
+  box-shadow: 0 0 30px rgba(255, 178, 222, 0.6);
 }
 .cta-section .btn-secondary {
   background: white;
-  border: 1px solid #ddd;
+  border: 2px solid #ddd;
   border-radius: 30px;
   color: #1f2937;
-  font-size: 16px;
-  font-weight: 500;
+  font-size: 17px;
+  font-weight: 600;
   cursor: pointer;
-  padding: 12px 30px;
+  padding: 15px 35px;
   transition: all 0.3s ease;
   text-decoration: none;
   display: inline-block;
+  min-width: 160px;
 }
 .cta-section .btn-secondary:hover {
   background: #f0f0f0;
-  transform: translateY(-2px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+  border-color: hsl(353, 96%, 82%);
+  box-shadow: 0 0 30px rgba(255, 178, 222, 0.6);
 }
 
+@media (max-width: 1024px) {
+  .about-container {
+    max-width: 900px;
+    padding: 35px 20px;
+  }
+  .steps-container {
+    gap: 20px;
+  }
+  .step-item {
+    padding: 22px 18px;
+  }
+  .step-item .step-number {
+    width: 65px;
+    height: 65px;
+    font-size: 22px;
+  }
+  .step-item h4 {
+    font-size: 18px;
+  }
+  .step-item p {
+    font-size: 14px;
+    max-width: 200px;
+  }
+}
 @media (max-width: 768px) {
   .about-container {
     padding: 30px 15px;
   }
+  .about-header {
+    margin-bottom: 40px;
+  }
   .about-header h1 {
-    font-size: 32px;
+    font-size: 36px;
   }
   .about-header .about-subtitle {
-    font-size: 16px;
+    font-size: 18px;
   }
   .about-mission,
   .how-it-works {
-    padding: 25px 20px;
+    padding: 30px 25px;
+    margin-bottom: 40px;
+  }
+  .about-mission h2,
+  .how-it-works h2 {
+    font-size: 24px;
   }
   .feature-card {
-    padding: 20px;
+    padding: 25px;
+  }
+  .feature-card .feature-icon {
+    font-size: 38px;
+  }
+  .feature-card h3 {
+    font-size: 20px;
   }
   .cta-section {
-    padding: 25px 20px;
+    padding: 35px 25px;
   }
   .cta-section h2 {
-    font-size: 20px;
+    font-size: 24px;
+  }
+  .cta-section p {
+    font-size: 16px;
   }
 }
 @media (max-width: 480px) {
   .about-header h1 {
-    font-size: 28px;
+    font-size: 32px;
   }
   .about-mission,
   .how-it-works {
+    padding: 25px 20px;
+  }
+  .step-item {
     padding: 20px 15px;
   }
-  .steps-container {
-    gap: 20px;
+  .step-item .step-number {
+    width: 60px;
+    height: 60px;
+    font-size: 20px;
+    margin-bottom: 15px;
+  }
+  .step-item h4 {
+    font-size: 18px;
+    margin-bottom: 12px;
+  }
+  .step-item p {
+    font-size: 14px;
+    max-width: none;
   }
 }/*# sourceMappingURL=About.css.map */

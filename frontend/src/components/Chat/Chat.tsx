@@ -7,7 +7,6 @@ import responseService from '../../services/responseService';
 import { MessageList } from '../../components/MessageList/MessageList';
 import { QuickQuestions } from '../../components/QuickQuestions/QuickQuestions';
 import { InputArea } from '../../components/InputArea/InputArea';
-import { StatusIndicators } from '../../components/StatusIndicators/StatusIndicators';
 import { ListeningOverlay } from '../../components/ListeningOverlay/ListeningOverlay';
 import { useContext } from 'react';
 import { AuthContext } from '../AuthContext/AuthContext';
@@ -265,8 +264,6 @@ const Chat: React.FC = () => {
           assistantResponses={assistantResponses} 
           onQuestionClick={handleQuickQuestion} 
         />
-
-        <StatusIndicators isSpeaking={isSpeaking} isListening={isListening} />
       </div>
     </>
   );

@@ -9,7 +9,7 @@ function About() {
       <div className="about-header">
         <h1>About Philly</h1>
         <p className="about-subtitle">
-          Your intelligent assistant for learning and productivity
+          Your voice assistant for learning and productivity
         </p>
       </div>
 
@@ -17,8 +17,7 @@ function About() {
       <div className="about-mission">
         <h2>Our Mission</h2>
         <p>
-          Philly helps students and professionals organize their work, stay on schedule, 
-          and achieve their goals with smart AI-powered assistance.
+          Our mission is to help students unlock their full potential by turning organizational chaos into structured success.
         </p>
       </div>
 
@@ -26,25 +25,25 @@ function About() {
       <div className="features-grid">
         <div className="feature-card">
           <div className="feature-icon">📚</div>
-          <h3>Smart Organization</h3>
+          <h3>Organization</h3>
           <p>
-            Keep tasks and deadlines organized in one place with intelligent prioritization.
+            Centralize your academic life and track deadlines with ease.
           </p>
         </div>
 
         <div className="feature-card">
           <div className="feature-icon">⏰</div>
-          <h3>Smart Reminders</h3>
+          <h3>Reminders</h3>
           <p>
-            Timely reminders for assignments and meetings that adapt to your schedule.
+            Easily log your assignment deadlines and never miss a due date.
           </p>
         </div>
 
         <div className="feature-card">
-          <div className="feature-icon">🤖</div>
-          <h3>AI Assistance</h3>
+          <div className="feature-icon">☺️</div>
+          <h3>Supportive atmosphere</h3>
           <p>
-            Personalized recommendations and productivity tips powered by AI technology.
+            A supportive study companion that makes your academic routine feel less like a chore.
           </p>
         </div>
       </div>
@@ -66,7 +65,7 @@ function About() {
           <div className="step-item">
             <div className="step-number">3</div>
             <h4>Get Assisted</h4>
-            <p>Receive reminders and insights as you work.</p>
+            <p>Keep all your due dates in one simple view.</p>
           </div>
           <div className="step-item">
             <div className="step-number">4</div>
@@ -80,7 +79,7 @@ function About() {
       <div className="cta-section">
         <h2>Ready to Get Started?</h2>
         <p>
-          Join students and professionals who are achieving more with Philly.
+          Join students who are achieving more with Philly.
         </p>
         <div className="cta-buttons">
           <Link to="/register" className="btn-primary">
