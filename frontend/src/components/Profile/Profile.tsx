@@ -1,6 +1,7 @@
-// Profile.tsx (оновлена версія без username)
+// Profile.tsx
 import { useContext, useState } from 'react';
 import { AuthContext } from '../AuthContext/AuthContext';
+import { useNavigate } from 'react-router-dom'; // Додаємо імпорт для навігації
 import axios from 'axios';
 import './Profile.scss';
 
@@ -17,8 +18,14 @@ const AVAILABLE_AVATARS = [
 
 export default function Profile() {
   const { user, setUser, logout } = useContext(AuthContext);
+  const navigate = useNavigate(); // Хук для перенаправлення
+
   const [editing, setEditing] = useState(false);
   const [showAvatarSelect, setShowAvatarSelect] = useState(false);
+  
+  // Стан для модального вікна виходу
+  const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
+
   const [firstName, setFirstName] = useState(user?.firstName || '');
   const [lastName, setLastName] = useState(user?.lastName || '');
   const [email, setEmail] = useState(user?.email || '');
@@ -82,6 +89,23 @@ export default function Profile() {
 
   const toggleAvatarSelect = () => {
     setShowAvatarSelect(!showAvatarSelect);
+  };
+
+  // Функція обробки натискання на кнопку Logout (просто показує вікно)
+  const handleLogoutClick = () => {
+    setShowLogoutConfirm(true);
+  };
+
+  // Функція підтвердження виходу
+  const confirmLogout = () => {
+    logout(); // Виконуємо вихід з контексту
+    setShowLogoutConfirm(false); // Закриваємо модалку (хоча ми все одно перейдемо)
+    navigate('/'); // Перенаправляємо на головну
+  };
+
+  // Функція скасування виходу
+  const cancelLogout = () => {
+    setShowLogoutConfirm(false);
   };
 
   return (
@@ -192,7 +216,8 @@ export default function Profile() {
                 >
                   Edit Profile
                 </button>
-                <button className="btn logout" onClick={logout}>
+                {/* Змінено обробник події на handleLogoutClick */}
+                <button className="btn logout" onClick={handleLogoutClick}>
                   Logout
                 </button>
               </>
@@ -200,6 +225,24 @@ export default function Profile() {
           </div>
         </div>
       </div>
+
+      {/* Модальне вікно підтвердження виходу */}
+      {showLogoutConfirm && (
+        <div className="logout-confirm-overlay">
+          <div className="logout-confirm-modal">
+            <h3>Confirm Logout</h3>
+            <p>Are you sure you want to log out?</p>
+            <div className="logout-confirm-buttons">
+              <button className="btn confirm-yes" onClick={confirmLogout}>
+                Yes, Logout
+              </button>
+              <button className="btn confirm-no" onClick={cancelLogout}>
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

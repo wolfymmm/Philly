@@ -367,3 +367,78 @@
     }
   }
 }
+
+/* Стилі для модального вікна виходу */
+.logout-confirm-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); // Напівпрозорий фон
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; // Поверх всього
+}
+
+.logout-confirm-modal {
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  max-width: 400px;
+  width: 90%;
+  animation: fadeIn 0.2s ease-out;
+
+  h3 {
+    margin-top: 0;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+
+  p {
+    margin-bottom: 1.5rem;
+    color: #666;
+    font-size: 1rem;
+  }
+}
+
+.logout-confirm-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+
+  button {
+    padding: 0.6rem 1.2rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+
+    &.confirm-yes {
+      background-color: #dc3545; // Червоний для підтвердження виходу
+      color: white;
+
+      &:hover {
+        background-color: #c82333;
+      }
+    }
+
+    &.confirm-no {
+      background-color: #e2e6ea;
+      color: #333;
+
+      &:hover {
+        background-color: #dbe0e5;
+      }
+    }
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
