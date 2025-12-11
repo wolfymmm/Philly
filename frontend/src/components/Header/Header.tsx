@@ -1,6 +1,6 @@
-import React, { useContext, useState, useEffect } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import { AuthContext } from '../AuthContext/AuthContext';
+import { AuthContext } from '../../context/AuthContext/AuthContext';
 import './Header.css';
 
 function Header() {

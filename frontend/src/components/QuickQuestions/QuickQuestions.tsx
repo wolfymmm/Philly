@@ -1,5 +1,5 @@
 import React from 'react';
-import type { AssistantResponse } from '../../types/types';
+import type { AssistantResponse } from '../../types/chat';
 
 interface QuickQuestionsProps {
   assistantResponses: AssistantResponse[];

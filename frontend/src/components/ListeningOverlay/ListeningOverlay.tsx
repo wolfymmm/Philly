@@ -6,7 +6,6 @@ interface ListeningOverlayProps {
 }
 
 export const ListeningOverlay: React.FC<ListeningOverlayProps> = ({ onClose }) => {
-  // Закриваємо оверлей при натисканні Escape
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {

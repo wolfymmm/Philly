@@ -1,4 +1,3 @@
-// components/Loader/Loader.jsx
 import './Loader.scss';
 
 export default function Loader() {

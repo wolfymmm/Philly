@@ -39,7 +39,7 @@ const taskSchema = new mongoose.Schema({
     trim: true
   },
   estimatedTime: {
-    type: Number, // в хвилинах
+    type: Number,
     default: 0
   },
   isRecurring: {
@@ -64,7 +64,6 @@ const taskSchema = new mongoose.Schema({
   collection: 'Tasks'
 });
 
-// Індекси
 taskSchema.index({ user: 1, dueDate: 1 });
 taskSchema.index({ user: 1, status: 1 });
 

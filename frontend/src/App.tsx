@@ -16,12 +16,12 @@ import Profile from './components/Profile/Profile'
 
 
 function App() {
-  const location = useLocation();           // ➕ відстежуємо зміну маршруту
+  const location = useLocation();     
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     setLoading(true);
-    const timer = setTimeout(() => setLoading(false), 300); // ➕ плавний loader 300 мс
+    const timer = setTimeout(() => setLoading(false), 300); 
     return () => clearTimeout(timer);
   }, [location.pathname]);
 

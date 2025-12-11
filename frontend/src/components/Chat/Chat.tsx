@@ -1,16 +1,16 @@
 import React, { useState, useRef, useEffect } from "react";
-import type { Message } from '../../types/types';
+import type { Message } from '../../types/chat';
 import { useSpeechRecognition } from '../../hooks/useSpeechRecognition';
-import { useSpeechSynthesis } from '../../hooks/useSpeechSynthesis';
 import { useAssistantResponses } from '../../hooks/useAssistantResponses';
+import { useSpeechSynthesis } from '../../hooks/useSpeechSynthesis';
 import responseService from '../../services/responseService';
 import { MessageList } from '../../components/MessageList/MessageList';
 import { QuickQuestions } from '../../components/QuickQuestions/QuickQuestions';
 import { InputArea } from '../../components/InputArea/InputArea';
 import { ListeningOverlay } from '../../components/ListeningOverlay/ListeningOverlay';
 import { useContext } from 'react';
-import { AuthContext } from '../AuthContext/AuthContext';
-import { API_BASE_URL } from '../../types/types';
+import { AuthContext } from '../../context/AuthContext/AuthContext';
+import { API_BASE_URL } from '../../types/chat';
 import './Chat.scss';
 
 const Chat: React.FC = () => {
@@ -22,25 +22,21 @@ const Chat: React.FC = () => {
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
-  
-  const { isSpeaking, speak } = useSpeechSynthesis();
-  
   const handleVoiceResult = (transcript: string) => {
     setInput(transcript);
     setTimeout(() => sendMessage(transcript), 100);
   };
+  const { speak } = useSpeechSynthesis();
 
   const { isListening, startListening, stopListening } = useSpeechRecognition(handleVoiceResult);
   const { assistantResponses } = useAssistantResponses();
   const { user } = useContext(AuthContext);
 
-  // Додайте цей useEffect для відладки
   useEffect(() => {
     console.log('🔄 Assistant responses updated:', assistantResponses?.length || 0, 'items');
     if (assistantResponses && assistantResponses.length > 0) {
       console.log('📋 First 3 triggers:', assistantResponses.slice(0, 3).map(r => r.trigger));
       
-      // Перевірка чи є наш тригер
       const mondayTriggers = assistantResponses.filter(r => 
         r.trigger.toLowerCase().includes('monday')
       );
@@ -88,7 +84,6 @@ const Chat: React.FC = () => {
     console.log('🔍 Searching for response for input:', lowerInput);
     console.log(`📊 Have ${assistantResponses.length} responses to search`);
 
-    // 1. Точне співпадіння (повністю однакові)
     const exactMatch = assistantResponses.find(r => 
       r.isActive && r.trigger.toLowerCase() === lowerInput
     );
@@ -100,13 +95,11 @@ const Chat: React.FC = () => {
 
     console.log('🔍 No exact match, checking partial matches...');
 
-    // 2. Введення користувача МІСТИТЬ тригер
     const partialMatches = assistantResponses.filter(r => 
       r.isActive && lowerInput.includes(r.trigger.toLowerCase())
     );
 
     if (partialMatches.length > 0) {
-      // Сортуємо за довжиною тригера (довші тригери - точніші)
       partialMatches.sort((a, b) => b.trigger.length - a.trigger.length);
       const bestMatch = partialMatches[0];
       console.log('✅ Found PARTIAL match (user input contains trigger):', bestMatch.trigger);
@@ -116,7 +109,6 @@ const Chat: React.FC = () => {
 
     console.log('🔍 No partial matches, checking if trigger is in user input...');
 
-    // 3. Тригер МІСТИТЬСЯ у введенні користувача
     const reverseMatches = assistantResponses.filter(r => 
       r.isActive && r.trigger.toLowerCase().includes(lowerInput)
     );
@@ -128,8 +120,6 @@ const Chat: React.FC = () => {
       return await responseService.processDynamicResponse(bestMatch.response, bestMatch.trigger);
     }
 
-    // 4. Спеціальний пошук для "how many classes do i have on monday"
-    // Шукаємо тригери, які містять ключові слова
     const keywords = lowerInput.split(' ').filter(word => word.length > 3);
     console.log('🔍 Keywords from input:', keywords);
     
@@ -141,7 +131,7 @@ const Chat: React.FC = () => {
         triggerLower.includes(keyword)
       ).length;
       
-      if (keywordMatchCount >= 2) { // Якщо знайдено 2+ ключових слова
+      if (keywordMatchCount >= 2) { 
         console.log(`✅ Found by KEYWORDS (${keywordMatchCount} matches):`, response.trigger);
         console.log('📝 Template:', response.response);
         return await responseService.processDynamicResponse(response.response, response.trigger);
@@ -156,7 +146,6 @@ const Chat: React.FC = () => {
     console.log('\n🎯 ===== FINDING RESPONSE =====');
     console.log('📝 Original input:', userInput);
     
-    // 1. Спершу шукаємо в базі даних
     const dbResponse = await findInDatabaseResponses(userInput);
     if (dbResponse) {
       console.log('✅ Returning database response');
@@ -165,7 +154,6 @@ const Chat: React.FC = () => {
 
     console.log('🔄 Database search failed, using direct handling');
     
-    // 2. Безпосередня обробка "how many classes do i have on monday"
     const lowerInput = userInput.toLowerCase().trim();
     
     if (lowerInput.includes('how many classes') && lowerInput.includes('on')) {
@@ -185,7 +173,6 @@ const Chat: React.FC = () => {
       }
     }
 
-    // 3. Загальна обробка
     if (lowerInput.includes('classes') || lowerInput.includes('schedule')) {
       if (lowerInput.includes('today')) {
         return await responseService.processDynamicResponse('{schedule_today}', 'today');
@@ -194,7 +181,6 @@ const Chat: React.FC = () => {
       }
     }
 
-    // 4. Fallback
     return "I'm not sure how to answer that. Try asking 'What classes do I have today?' or 'How many tasks do I have?'";
   };
 

@@ -1,5 +1,4 @@
-// HomeLayout.tsx
-import "./HomeLayout.css";
+import "./HomeLayout.scss";
 
 export default function HomeLayout({ children }: { children: React.ReactNode }) {
   return (

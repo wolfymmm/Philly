@@ -4,13 +4,10 @@ import auth from '../middleware/auth.js';
 
 const router = express.Router();
 
-// 🔥 ЗАХИСТ: Усі маршрути нижче вимагають токен
 router.use(auth);
 
-// === НАЛАШТУВАННЯ ===
 const SEMESTER_START = new Date('2025-12-08'); 
 
-// Функція для визначення: це 1-й (Odd) чи 2-й (Even) тиждень
 const getAcademicWeekType = (dateToCheck) => {
   const start = new Date(SEMESTER_START);
   start.setHours(0, 0, 0, 0);
@@ -27,7 +24,6 @@ const getAcademicWeekType = (dateToCheck) => {
   return weeksPassed % 2 === 0 ? 'odd' : 'even';
 };
 
-// GET /today - Розклад на сьогодні
 router.get('/today', async (req, res) => {
   try {
     const today = new Date();
@@ -54,7 +50,6 @@ router.get('/today', async (req, res) => {
   }
 });
 
-// GET /tomorrow - Розклад на завтра
 router.get('/tomorrow', async (req, res) => {
   try {
     const tomorrow = new Date();
@@ -81,18 +76,15 @@ router.get('/tomorrow', async (req, res) => {
   }
 });
 
-// GET /all - Весь розклад (фільтр по тижню)
 router.get('/all', async (req, res) => {
   try {
-    const { week } = req.query; // 'odd' або 'even'
+    const { week } = req.query; 
     let filter = { user: req.user.id };
 
     console.log(`[API] Fetching ALL schedules for user ${req.user.email}. Week: ${week}`);
 
     if (week) {
       const isOddRequested = week.toLowerCase() === 'odd';
-      // $mod: [2, 1] -> непарні (1, 3, 5...)
-      // $mod: [2, 0] -> парні (0, 2, 4...)
       filter.weekNumber = { $mod: [2, isOddRequested ? 1 : 0] };
     }
 
@@ -104,10 +96,8 @@ router.get('/all', async (req, res) => {
   }
 });
 
-// 🔥 PUT /update-day - Оновлення розкладу (для кнопки Save на фронтенді)
 router.put('/update-day', async (req, res) => {
   try {
-    // Frontend надсилає: dayOfWeek ('monday'), classes ([...]), weekType ('odd')
     const { dayOfWeek, classes, weekType } = req.body;
     
     if (!dayOfWeek || !weekType) {
@@ -117,8 +107,6 @@ router.put('/update-day', async (req, res) => {
     const isOdd = weekType === 'odd';
     console.log(`[API] Updating ${dayOfWeek} (${weekType}) for user ${req.user.email}`);
 
-    // Оновлюємо ВСІ записи в базі, які відповідають цьому дню і типу тижня
-    // Наприклад: Оновити всі "Понеділки" на "Непарних" тижнях
     const result = await Schedule.updateMany(
       { 
         user: req.user.id,
@@ -137,7 +125,6 @@ router.put('/update-day', async (req, res) => {
   }
 });
 
-// POST / - Створити один конкретний запис (якщо треба)
 router.post('/', async (req, res) => {
   try {
     const newSchedule = new Schedule({

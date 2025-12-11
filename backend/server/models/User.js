@@ -34,7 +34,6 @@ const userSchema = new mongoose.Schema({
   }
 });
 
-// Оновлюємо updatedAt перед збереженням
 userSchema.pre('save', function(next) {
   this.updatedAt = new Date();
   next();

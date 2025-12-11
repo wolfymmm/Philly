@@ -1,9 +1,9 @@
-// Profile.tsx
 import { useContext, useState } from 'react';
-import { AuthContext } from '../AuthContext/AuthContext';
-import { useNavigate } from 'react-router-dom'; // Додаємо імпорт для навігації
+import { AuthContext } from '../../context/AuthContext/AuthContext';
+import { useNavigate } from 'react-router-dom'; 
 import axios from 'axios';
 import './Profile.scss';
+import { AxiosError } from 'axios';
 
 const AVAILABLE_AVATARS = [
   '/pig.svg',
@@ -18,12 +18,11 @@ const AVAILABLE_AVATARS = [
 
 export default function Profile() {
   const { user, setUser, logout } = useContext(AuthContext);
-  const navigate = useNavigate(); // Хук для перенаправлення
+  const navigate = useNavigate(); 
 
   const [editing, setEditing] = useState(false);
   const [showAvatarSelect, setShowAvatarSelect] = useState(false);
   
-  // Стан для модального вікна виходу
   const [showLogoutConfirm, setShowLogoutConfirm] = useState(false);
 
   const [firstName, setFirstName] = useState(user?.firstName || '');
@@ -70,9 +69,10 @@ export default function Profile() {
         setMessage('');
       }, 3000);
       
-    } catch (err: any) {
+    } catch (err) {
       console.error('Profile update error:', err);
-      setMessage(err.response?.data?.message || 'Failed to update profile');
+      const error = err as AxiosError<{ message: string }>;
+      setMessage(error.response?.data?.message || 'Failed to update profile');
       setMessageType('error');
     }
   };
@@ -91,19 +91,16 @@ export default function Profile() {
     setShowAvatarSelect(!showAvatarSelect);
   };
 
-  // Функція обробки натискання на кнопку Logout (просто показує вікно)
   const handleLogoutClick = () => {
     setShowLogoutConfirm(true);
   };
 
-  // Функція підтвердження виходу
   const confirmLogout = () => {
-    logout(); // Виконуємо вихід з контексту
-    setShowLogoutConfirm(false); // Закриваємо модалку (хоча ми все одно перейдемо)
-    navigate('/'); // Перенаправляємо на головну
+    logout(); 
+    setShowLogoutConfirm(false); 
+    navigate('/'); 
   };
 
-  // Функція скасування виходу
   const cancelLogout = () => {
     setShowLogoutConfirm(false);
   };

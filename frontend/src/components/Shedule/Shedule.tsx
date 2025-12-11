@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './Shedule.scss';
 
@@ -38,7 +38,6 @@ function Shedule() {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [editBuffer, setEditBuffer] = useState<Record<string, ClassItem[]>>({});
 
-  // Отримання заголовків з токеном
   const getAuthHeaders = () => {
     const token = localStorage.getItem('token');
     return {
@@ -48,7 +47,6 @@ function Shedule() {
     };
   };
 
-  // ---------------------- LOAD SCHEDULE ---------------------------
   useEffect(() => {
     const fetchSchedule = async () => {
       try {
@@ -57,7 +55,6 @@ function Shedule() {
 
         const weekParam = weekType === 1 ? "odd" : "even";
 
-        // 🔥 Правильний URL (schedules)
         const res = await axios.get<ScheduleDoc[]>(
           `http://localhost:5000/api/schedule/all?week=${weekParam}`,
           getAuthHeaders()
@@ -65,7 +62,6 @@ function Shedule() {
 
         const grouped: Record<string, ClassItem[]> = {};
         
-        // Ініціалізуємо всі дні
         DAYS_ORDER.forEach(day => {
           grouped[day] = [];
         });
@@ -93,8 +89,6 @@ function Shedule() {
   const sortClassesByTime = (classes: ClassItem[]) => {
     return [...classes].sort((a, b) => a.startTime.localeCompare(b.startTime));
   };
-
-  // ---------------------- EDITING LOGIC ---------------------------
 
   const handleAddClass = (day: string) => {
     setEditBuffer(prev => ({
@@ -125,19 +119,13 @@ function Shedule() {
     });
   };
 
-  // ---------------------- SAVE CHANGES (ВИПРАВЛЕНО) ---------------------------
+
   const handleSave = async () => {
     try {
       const weekParam = weekType === 1 ? "odd" : "even";
 
-      // Проходимо по всіх днях і оновлюємо їх
       for (const day of DAYS_ORDER) {
-        // Якщо є дані для редагування цього дня
         if (editBuffer[day]) {
-           // 🔥 ВИПРАВЛЕНО:
-           // 1. URL: /api/schedules/update-day (множина + update-day)
-           // 2. Method: PUT (оновлення)
-           // 3. Body: додали weekType, щоб бекенд знав який тиждень редагувати
            await axios.put(`http://localhost:5000/api/schedule/update-day`, {
             dayOfWeek: day,
             classes: editBuffer[day],
@@ -146,7 +134,6 @@ function Shedule() {
         }
       }
       
-      // Оновлюємо локальний стан
       setScheduleData(editBuffer);
       setIsEditing(false);
       alert("Schedule saved successfully!");

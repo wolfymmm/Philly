@@ -49,7 +49,7 @@ const seedData = async () => {
     console.log('✅ Connected to Philly database');
 
     // Динамічний імпорт моделі
-    const { default: AssistantResponse } = await import('./models/AssistantResponse.js');
+    const { default: AssistantResponse } = await import('../models/AssistantResponse.js');
     
     // Очищення колекції (опціонально)
     await AssistantResponse.deleteMany({});

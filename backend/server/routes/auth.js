@@ -2,17 +2,15 @@ import express from 'express';
 import User from '../models/User.js';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
-import auth from '../middleware/auth.js'; // <--- 1. Імпортуємо middleware
+import auth from '../middleware/auth.js'; 
 
 const router = express.Router();
 const SECRET_KEY = process.env.JWT_SECRET || 'mysecretkey123';
 
-// === РЕЄСТРАЦІЯ (Без змін) ===
 router.post('/register', async (req, res) => {
   try {
     const { email, password, firstName, lastName, avatar } = req.body;
-    // ... (ваш код реєстрації залишається без змін) ...
-    // Для стислості я його згорнув, він у вас правильний
+
     if (!email || !password) return res.status(400).json({ message: 'Email and password are required' });
     const existingUser = await User.findOne({ email });
     if (existingUser) return res.status(400).json({ message: 'User already exists' });
@@ -28,9 +26,7 @@ router.post('/register', async (req, res) => {
   }
 });
 
-// === ЛОГІН (Без змін) ===
 router.post('/login', async (req, res) => {
-  // ... (ваш код логіна залишається без змін) ...
     try {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json({ message: 'Email/Password required' });
@@ -48,8 +44,6 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// === ОТРИМАННЯ ПРОФІЛЮ (Можна спростити через middleware) ===
-// Використовуємо middleware 'auth', щоб не писати розшифровку токена вручну
 router.get('/profile', auth, async (req, res) => {
   try {
     const user = await User.findById(req.user.id).select('-password');
@@ -61,21 +55,16 @@ router.get('/profile', auth, async (req, res) => {
   }
 });
 
-// === ОНОВЛЕННЯ ПРОФІЛЮ (НОВИЙ КОД) ===
-// 2. Додаємо PUT запит, захищений middleware 'auth'
 router.put('/profile', auth, async (req, res) => {
   try {
-    // req.user.id ми маємо завдяки middleware auth
     const userId = req.user.id; 
     const { firstName, lastName, email, avatar } = req.body;
 
-    // Знаходимо користувача
     const user = await User.findById(userId);
     if (!user) {
       return res.status(404).json({ message: 'User not found' });
     }
 
-    // Якщо користувач змінює email, перевіряємо, чи він не зайнятий іншим юзером
     if (email && email !== user.email) {
       const emailExists = await User.findOne({ email });
       if (emailExists) {
@@ -84,19 +73,14 @@ router.put('/profile', auth, async (req, res) => {
       user.email = email;
     }
 
-    // Оновлюємо інші поля
-    // Використовуємо оператор || user.field, щоб не стерти дані, якщо поле пусте
-    // Але у вашому випадку фронтенд надсилає поточні значення, тому можна просто присвоїти
     if (firstName !== undefined) user.firstName = firstName;
     if (lastName !== undefined) user.lastName = lastName;
     if (avatar !== undefined) user.avatar = avatar;
 
-    // Зберігаємо (це оновить поле updatedAt автоматично через вашу модель)
     const updatedUser = await user.save();
 
-    console.log('✅ Profile updated for:', updatedUser.email);
+    console.log('Profile updated for:', updatedUser.email);
 
-    // Повертаємо оновлені дані (без пароля)
     res.json({
       message: 'Profile updated successfully',
       user: {
@@ -111,7 +95,7 @@ router.put('/profile', auth, async (req, res) => {
     });
 
   } catch (err) {
-    console.error('🔥 Profile update error:', err);
+    console.error('Profile update error:', err);
     res.status(500).json({ message: 'Server error during update' });
   }
 });

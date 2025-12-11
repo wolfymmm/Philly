@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Schedule from './models/Schedule.js'; 
+import Schedule from '../models/Schedule.js'; 
 import dotenv from 'dotenv';
 
 dotenv.config();

@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import { AxiosError } from 'axios';
 import './Register.scss';
 
 const Register: React.FC = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [firstName, setFirstName] = useState(''); // ДОДАНО
-    const [lastName, setLastName] = useState(''); // ДОДАНО
+    const [firstName, setFirstName] = useState(''); 
+    const [lastName, setLastName] = useState(''); 
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
     const navigate = useNavigate();
@@ -16,7 +17,6 @@ const Register: React.FC = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         
-        // Валідація
         if (!email || !password) {
             setError('Email and password are required');
             return;
@@ -48,10 +48,11 @@ const Register: React.FC = () => {
                 lastName
             });
             navigate('/login');
-        } catch (err: any) {
-            const errorMsg = err.response?.data?.message || 'Registration error';
+        } catch (err) {
+            const error = err as AxiosError<{ message: string }>;
+            const errorMsg = error.response?.data?.message || 'Registration error';
             setError(errorMsg);
-            console.error('Registration error:', err.response?.data);
+            console.error('Registration error:', error.response?.data);
         } finally {
             setIsLoading(false);
         }

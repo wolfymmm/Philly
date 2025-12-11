@@ -1,6 +1,7 @@
 import { useState, useContext } from 'react';
-import { AuthContext } from '../AuthContext/AuthContext';
+import { AuthContext } from '../../context/AuthContext/AuthContext';
 import { useNavigate, Link } from 'react-router-dom';
+import { AxiosError } from 'axios';
 import './Login.scss';
 
 export default function Login() {
@@ -17,8 +18,9 @@ export default function Login() {
       setError('');
       await login(email, password);
       navigate('/profile');
-    } catch (err: any) {
-      setError(err.response?.data?.message || 'Невірні облікові дані');
+    } catch (err) {
+      const error = err as AxiosError<{ message: string }>;
+      setError(error.response?.data?.message || 'Невірні облікові дані');
     } finally {
       setIsLoading(false);
     }

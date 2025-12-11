@@ -3,7 +3,6 @@ import AssistantResponse from '../models/AssistantResponse.js';
 
 const router = express.Router();
 
-// Отримати всі відповіді
 router.get('/', async (req, res) => {
   try {
     console.log('Fetching responses from database...');
@@ -16,7 +15,6 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Додати нову відповідь
 router.post('/', async (req, res) => {
   try {
     const { trigger, response, category } = req.body;

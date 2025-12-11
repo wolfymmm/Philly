@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
-import type { AssistantResponse } from '../types/types';
-import { API_BASE_URL } from '../types/types';
+import type { AssistantResponse } from '../types/chat';
+import { API_BASE_URL } from '../types/chat';
 
 export const useAssistantResponses = () => {
   const [assistantResponses, setAssistantResponses] = useState<AssistantResponse[]>([]);

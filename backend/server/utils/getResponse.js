@@ -4,7 +4,6 @@ import Schedule from '../models/Schedule.js';
 export async function getResponse(userMessage) {
   const message = userMessage.toLowerCase();
 
-  // --- Визначаємо дату ---
   const today = new Date();
   let targetDate = new Date(today);
 
@@ -29,7 +28,6 @@ export async function getResponse(userMessage) {
 
   const dayName = targetDate.toLocaleDateString('en-US', { weekday: 'long' }).toLowerCase();
 
-  // --- Логіка для розкладу ---
   if (message.includes("classes") || message.includes("schedule") || message.includes("lessons")) {
     try {
       const schedules = await Schedule.find({ dayOfWeek: dayName }).sort({ 'classes.startTime': 1 });
@@ -38,13 +36,11 @@ export async function getResponse(userMessage) {
         return `You have no classes on ${dayName}. Enjoy your free time!`;
       }
 
-      // Якщо питає "how many classes"
       if (message.includes("how many")) {
         const totalClasses = schedules.reduce((acc, s) => acc + (s.classes ? s.classes.length : 0), 0);
         return `You have ${totalClasses} classes on ${dayName}.`;
       }
 
-      // Список класів
       const classList = schedules
         .map(s => s.classes.map(c => `${c.subject} (${c.type || 'Lecture'}) ${c.startTime}-${c.endTime}`).join(", "))
         .join("\n");
@@ -57,12 +53,10 @@ export async function getResponse(userMessage) {
     }
   }
 
-  // --- Логіка для завдань (Tasks) ---
   if (message.includes("task") || message.includes("homework")) {
     return "I check your tasks... (Tasks logic to be implemented)";
   }
 
-  // --- Загальні відповіді ---
   const template = await AssistantResponse.findOne({
     trigger: { $in: [message] },
     isActive: true

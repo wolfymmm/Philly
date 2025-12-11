@@ -25,7 +25,6 @@ const assistantResponseSchema = new mongoose.Schema({
   collection: 'Responses'
 });
 
-// Індекс для швидкого пошуку
 assistantResponseSchema.index({ trigger: 1, category: 1 });
 
 export default mongoose.model('AssistantResponse', assistantResponseSchema, 'Responses');

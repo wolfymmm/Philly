@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import Task from './models/Tasks.js';
+import Task from '../models/Tasks.js';
 
 const seedTasks = async () => {
   try {

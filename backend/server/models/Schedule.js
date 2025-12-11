@@ -48,7 +48,6 @@ const scheduleSchema = new mongoose.Schema({
   collection: 'Schedules'
 });
 
-// Індекси
 scheduleSchema.index({ user: 1, date: 1 });
 scheduleSchema.index({ user: 1, dayOfWeek: 1 });
 
