@@ -4,16 +4,16 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; // Змінено з center на flex-start
-  min-height: 70vh; // Зменшено з 80vh
-  padding: 30px 20px 50px; // Зменшено верхній відступ
+  justify-content: flex-start; 
+  min-height: 70vh; 
+  padding: 30px 20px 50px; 
   text-align: center;
   grid-column: 1 / -1;
 
   h2 {
     font-weight: 600;
     font-size: 48px;
-    margin: 10px 0 20px 0; // Зменшено відступи
+    margin: 10px 0 20px 0; 
     color: #1f2937;
   }
 
@@ -21,7 +21,7 @@
     font-weight: 400;
     font-size: 18px;
     color: #717182;
-    margin: 0 0 30px 0; // Зменшено нижній відступ
+    margin: 0 0 30px 0; 
     max-width: 400px;
   }
 }
@@ -31,15 +31,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 50vh; // Зменшено висоту
+  min-height: 50vh; 
   animation: fadeIn 0.5s ease-in;
   grid-column: 1 / -1;
-  padding-top: 20px; // Додано невеликий відступ
+  padding-top: 20px; 
 
   h2 {
     font-weight: 600;
     font-size: 32px;
-    margin-bottom: 15px; // Зменшено
+    margin-bottom: 15px; 
     color: #1f2937;
   }
 
@@ -47,14 +47,14 @@
     font-weight: 400;
     font-size: 18px;
     color: #717182;
-    margin: 0 0 15px 0; // Зменшено
+    margin: 0 0 15px 0; 
   }
 }
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 20px; // Зменшено проміжок
+  gap: 20px; 
   width: 100%;
   max-width: 400px;
   margin: 0 auto;
@@ -63,7 +63,7 @@
   @keyframes slideUp {
     from {
       opacity: 0;
-      transform: translateY(20px); // Зменшено зсув
+      transform: translateY(20px); 
     }
     to {
       opacity: 1;
@@ -84,7 +84,7 @@
 .login-input {
   font-size: 16px;
   font-weight: 400;
-  padding: 14px 20px; // Зменшено трохи padding
+  padding: 14px 20px; 
   border: 1px solid #ddd;
   border-radius: 30px;
   background: #FAFAFA;
@@ -112,14 +112,13 @@
   font-size: 18px;
   font-weight: 500;
   cursor: pointer;
-  padding: 14px 30px; // Зменшено padding
+  padding: 14px 30px; 
   transition: all 0.3s ease;
   width: 100%;
-  margin-top: 5px; // Зменшено відступ
+  margin-top: 5px; 
 
   &:hover {
-    background: #fe7777;
-    box-shadow: 0 4px 12px rgba(253, 164, 175, 0.3);
+    background: linear-gradient(135deg, #FDA4AF 0%, #ff7a8a 100%);
   }
 
   &:disabled {
@@ -134,7 +133,7 @@
   font-weight: 400;
   font-size: 16px;
   color: #dc2626;
-  margin: 8px 0; // Зменшено
+  margin: 8px 0; 
   padding: 10px 20px;
   background: #fef2f2;
   border-radius: 30px;
@@ -149,10 +148,10 @@
 }
 
 .login-links {
-  margin-top: 20px; // Зменшено з 30px
+  margin-top: 20px; 
   display: flex;
   flex-direction: column;
-  gap: 12px; // Зменшено проміжок
+  gap: 12px; 
   font-size: 16px;
   color: #717182;
 
@@ -173,7 +172,7 @@
   display: flex;
   align-items: center;
   gap: 11px;
-  margin-top: 15px; // Зменшено
+  margin-top: 15px; 
 }
 
 .AI-button {
@@ -186,10 +185,10 @@
   cursor: pointer;
 }
 
-// Адаптивність для різних екранів
+
 @media (max-width: 768px) {
   .login-container {
-    padding: 20px 20px 40px; // Зменшено відступи для мобільних
+    padding: 20px 20px 40px; 
     min-height: 60vh;
     
     h2 {

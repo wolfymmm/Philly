@@ -26,16 +26,11 @@
   font-weight: 600;
 }
 .chat-header .user-name-gradient {
-  /* 1. Задаємо градієнт (можете змінити кольори на свій смак) */
   background: linear-gradient(90deg, #72b4ff 0%, #f4a0b2 50%, #ff8eaa 100%);
-  /* 2. Стандартна техніка для тексту-градієнта */
   -webkit-background-clip: text;
   background-clip: text;
-  /* 3. Робимо колір тексту прозорим, щоб просвічувався фон */
   color: transparent;
-  /* Для підтримки Safari/Chrome іноді потрібна ця властивість: */
   -webkit-text-fill-color: transparent;
-  /* 4. Жирний шрифт, щоб градієнт було краще видно */
   font-weight: 700;
 }
 
@@ -90,8 +85,8 @@
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 550px; /* ЗБІЛЬШЕНО */
-  height: 550px; /* ЗБІЛЬШЕНО */
+  width: 550px;
+  height: 550px;
   z-index: 5;
   pointer-events: none;
 }
@@ -105,28 +100,28 @@
 
 .quick-questions {
   display: flex;
-  justify-content: center; /* ВИПРАВЛЕНО: вирівнює кнопки по центру */
+  justify-content: center;
   align-items: center;
-  flex-wrap: nowrap; /* щоб всі кнопки були в один ряд */
-  gap: 8px; /* відстань між кнопками */
+  flex-wrap: nowrap;
+  gap: 8px;
   padding: 5px 0;
 }
 
 .quick-questions button {
-  background-color: #96c5ff; /* ВИПРАВЛЕНО: гарний рожевий колір */
+  background-color: #96c5ff;
   color: white;
   border: none;
-  border-radius: 50px; /* повністю круглі кнопки */
-  width: 300px; /* маленька ширина */
-  height: 40px; /* маленька висота */
+  border-radius: 50px;
+  width: 300px;
+  height: 40px;
   font-size: 14px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   transition: transform 0.3s;
-  padding: 0; /* прибираємо внутрішні відступи */
-  flex-shrink: 0; /* щоб кнопки не стискались */
+  padding: 0;
+  flex-shrink: 0;
 }
 .quick-questions button:hover {
   background: linear-gradient(90deg, #72b4ff 0%, #f4a0b2 50%, #ff8eaa 100%);
@@ -145,7 +140,7 @@
 
 .textarea-wrapper textarea {
   width: 100%;
-  padding: 20px 80px 5px 30px; /* правий паддінг для кнопок */
+  padding: 20px 80px 5px 30px;
   border-radius: 50px;
   border: 1px solid #d0d0d0;
   font-size: 16px;
@@ -158,7 +153,6 @@
   border-color: #6a11cb;
 }
 
-/* Контейнер для кнопок */
 .icon-buttons {
   position: absolute;
   top: 50%;
@@ -168,7 +162,6 @@
   gap: 8px;
 }
 
-/* Кнопки-іконки */
 .icon-btn {
   width: 36px;
   height: 36px;

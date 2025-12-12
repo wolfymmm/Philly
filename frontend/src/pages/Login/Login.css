@@ -111,8 +111,7 @@
   margin-top: 5px;
 }
 .login-button-huge:hover {
-  background: #fe7777;
-  box-shadow: 0 4px 12px rgba(253, 164, 175, 0.3);
+  background: linear-gradient(135deg, #FDA4AF 0%, #ff7a8a 100%);
 }
 .login-button-huge:disabled {
   background: #fbbfcc;

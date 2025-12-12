@@ -12,7 +12,7 @@
   background-color: transparent;
   transition: all 0.3s ease;
 
-  /* Контейнер для вмісту хедера, який відповідає сітці main */
+  
   .header-container {
     display: grid;
     max-width: 1920px;
@@ -22,13 +22,12 @@
     column-gap: 40px;
     justify-content: center;
     
-    /* Весь вміст хедера займає всю ширину сітки */
     & > * {
       grid-column: 1 / -1;
     }
   }
 
-  /* Вміст всередині хедера */
+
   .header-content {
     display: flex;
     justify-content: space-between;
@@ -95,7 +94,6 @@
     }
   }
 
-  /* Стилі для хедера при скролі */
   &.scrolled {
     background-color: rgba(255, 255, 255, 0.6);
     backdrop-filter: blur(10px);
@@ -114,7 +112,7 @@
   border-radius: 50%;
   object-fit: cover;
   cursor: pointer;
-  border: 2px solid #4da6ff;
+  border: 4px solid $color-light-blue;
 }
 
 /* Адаптивність */

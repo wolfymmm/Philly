@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
   },
   avatar: { 
     type: String, 
-    default: '/pig.svg' 
+    default: 'avatars/pig.svg' 
   },
   createdAt: {
     type: Date,

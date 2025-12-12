@@ -26,7 +26,6 @@
   }
 }
 
-// Форма додавання завдань
 .add-task {
   display: flex;
   gap: 15px;
@@ -60,7 +59,7 @@
     }
 }
 
-/* Стилі для останнього select */
+
 select:last-of-type {
     appearance: none;
     -webkit-appearance: none;
@@ -90,14 +89,14 @@ select:last-of-type {
   }
 }
 
-// Список завдань
+
 .task-list {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 25px;
 }
 
-// Картка завдання
+
 .task-card {
   background: white;
   border-radius: 20px;
@@ -146,7 +145,7 @@ select:last-of-type {
     }
   }
 
-  // Індикатор пріоритету
+
   &::after {
     content: '';
     position: absolute;
@@ -170,7 +169,7 @@ select:last-of-type {
   }
 }
 
-// Група кнопок у картці
+
 .task-card > div:last-child {
   display: flex;
   flex-wrap: wrap;
@@ -241,7 +240,7 @@ select:last-of-type {
   }
 }
 
-// Статус баджи
+
 .status-badge {
   display: inline-block;
   padding: 4px 12px;
@@ -266,7 +265,7 @@ select:last-of-type {
   }
 }
 
-// Пріоритет баджи
+
 .priority-badge {
   display: inline-block;
   padding: 4px 12px;
@@ -291,7 +290,6 @@ select:last-of-type {
   }
 }
 
-// Адаптивність
 @media (max-width: 768px) {
   .tasks-container {
     padding: 20px 15px 40px;

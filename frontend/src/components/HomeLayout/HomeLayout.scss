@@ -2,14 +2,13 @@
 
 .home-layout-wrapper {
   width: 100%;
-  /* Додаємо сітку тут */
   display: grid;
   max-width: 1920px;
   grid-template-columns: repeat(12, 60px);
   column-gap: 40px;
   justify-content: center;
-    grid-column: 1 / -1; /* Займає всі 12 колонок */
-    padding: 60px 0; /* Відступи з боків */
+    grid-column: 1 / -1; 
+    padding: 60px 0; 
 }
 
 .home-page {

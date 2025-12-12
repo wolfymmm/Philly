@@ -39,9 +39,10 @@ function Header() {
             {user ? (
               <Link to="/profile">
                 <img
-                  src={user.avatar || 'default-avatar.svg'}
+                  src={user.avatar || 'avatars/pig.svg'}
                   alt="Profile"
                   className="header-avatar"
+                  key={user.avatar}
                 />
               </Link>
             ) : (

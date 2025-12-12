@@ -1,4 +1,3 @@
-@charset "UTF-8";
 .profile-container {
   grid-column: 1/-1;
   padding: 30px 20px 50px;
@@ -313,7 +312,7 @@
   transition: all 0.3s ease;
   outline: none;
   width: 100%;
-  box-sizing: border-box; /* Додаємо цю властивість */
+  box-sizing: border-box;
 }
 .profile-info-field input:focus {
   border-color: #FDA4AF;
@@ -326,69 +325,109 @@
   cursor: not-allowed;
 }
 
-/* Стилі для модального вікна виходу */
 .logout-confirm-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.4);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
+  -webkit-backdrop-filter: blur(4px);
+          backdrop-filter: blur(4px);
 }
 
 .logout-confirm-modal {
   background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  padding: 40px;
+  border-radius: 24px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
   text-align: center;
-  max-width: 400px;
+  max-width: 450px;
   width: 90%;
-  animation: fadeIn 0.2s ease-out;
+  border: 1px solid #f0f0f0;
+  animation: modalFadeIn 0.3s ease-out;
 }
 .logout-confirm-modal h3 {
-  margin-top: 0;
-  margin-bottom: 1rem;
+  font-weight: 600;
+  font-size: 24px;
   color: #333;
+  margin: 0 0 15px 0;
 }
 .logout-confirm-modal p {
-  margin-bottom: 1.5rem;
-  color: #666;
-  font-size: 1rem;
+  font-size: 16px;
+  color: #717182;
+  margin: 0 0 30px 0;
+  line-height: 1.5;
 }
 
 .logout-confirm-buttons {
   display: flex;
+  gap: 15px;
   justify-content: center;
-  gap: 1rem;
 }
 .logout-confirm-buttons button {
-  padding: 0.6rem 1.2rem;
-  border-radius: 6px;
-  font-weight: 600;
+  font-family: "Montserrat", sans-serif;
+  font-size: 16px;
+  font-weight: 500;
+  padding: 14px 30px;
+  border-radius: 30px;
   cursor: pointer;
+  transition: all 0.3s ease;
   border: none;
-  transition: all 0.2s;
+  min-width: 140px;
 }
 .logout-confirm-buttons button.confirm-yes {
-  background-color: #dc3545;
+  background: linear-gradient(135deg, #FDA4AF 0%, #ff7a8a 100%);
   color: white;
 }
 .logout-confirm-buttons button.confirm-yes:hover {
-  background-color: #c82333;
+  transform: translateY(-2px);
 }
 .logout-confirm-buttons button.confirm-no {
-  background-color: #e2e6ea;
+  background: white;
+  border: 1px solid #ddd;
   color: #333;
 }
 .logout-confirm-buttons button.confirm-no:hover {
-  background-color: #dbe0e5;
+  border-color: #FDA4AF;
+  background: #FAFAFA;
 }
 
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@media (max-width: 480px) {
+  .logout-confirm-modal {
+    padding: 30px 25px;
+    margin: 20px;
+  }
+  .logout-confirm-modal h3 {
+    font-size: 20px;
+  }
+  .logout-confirm-modal p {
+    font-size: 14px;
+  }
+  .logout-confirm-buttons {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .logout-confirm-buttons button {
+    width: 100%;
+    min-width: auto;
+    padding: 12px 20px;
+  }
+}
 @keyframes fadeIn {
   from {
     opacity: 0;
