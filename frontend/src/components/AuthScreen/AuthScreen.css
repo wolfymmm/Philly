@@ -48,19 +48,17 @@
 
 .auth-button-primary {
   background: #FDA4AF;
-  border: 1px solid #FDA4AF;
+  border: none;
   border-radius: 30px;
   color: #9F1239;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   padding: 12px 30px;
-  transition: all 0.3s ease;
   min-width: 120px;
 }
 .auth-button-primary:hover {
-  background: #fe7777;
-  transform: translateY(-2px);
+  background: linear-gradient(130deg, rgba(167, 229, 255, 0.2666666667), #ff9cbd);
 }
 
 .auth-button-secondary {
@@ -72,12 +70,10 @@
   font-weight: 500;
   cursor: pointer;
   padding: 12px 30px;
-  transition: all 0.3s ease;
   min-width: 120px;
 }
 .auth-button-secondary:hover {
-  background: #f0f0f0;
-  transform: translateY(-2px);
+  border-color: #FDA4AF;
 }
 
 @keyframes fadeIn {

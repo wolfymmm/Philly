@@ -51,19 +51,17 @@
 
 .auth-button-primary {
   background: #FDA4AF;
-  border: 1px solid #FDA4AF;
+  border: none;
   border-radius: 30px;
   color: #9F1239;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
   padding: 12px 30px;
-  transition: all 0.3s ease;
   min-width: 120px;
   
   &:hover {
-    background: #fe7777;
-    transform: translateY(-2px);
+    background: linear-gradient(130deg, #a7e5ff44, #ff9cbd);
   }
 }
 
@@ -76,12 +74,10 @@
   font-weight: 500;
   cursor: pointer;
   padding: 12px 30px;
-  transition: all 0.3s ease;
   min-width: 120px;
   
   &:hover {
-    background: #f0f0f0;
-    transform: translateY(-2px);
+  border-color: $color-pink-medium;
   }
 }
 
