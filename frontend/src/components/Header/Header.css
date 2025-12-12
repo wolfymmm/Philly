@@ -1,7 +1,7 @@
 @charset "UTF-8";
 .header {
   padding: 25px 0;
-  color: white;
+  color: #FAFAFA;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -45,7 +45,7 @@
   padding: 0 170px;
 }
 .header .nav-links a {
-  color: black;
+  color: #333;
   text-decoration: none;
 }
 .header .nav-links a:hover {
@@ -61,18 +61,18 @@
   background: #FAFAFA;
   border: 1px solid #dddddd;
   border-radius: 30px;
-  color: black;
+  color: #333;
   font-size: 14px;
   cursor: pointer;
   padding: 10px 30px;
   text-transform: uppercase;
 }
 .header .login-button:hover {
-  background: #fe7777;
+  border: 1px solid #FDA4AF;
 }
 .header .try-button {
   background: #FDA4AF;
-  border: 1px solid #FDA4AF;
+  border: none;
   border-radius: 30px;
   color: #9F1239;
   font-family: "Arial", sans-serif;
@@ -82,7 +82,7 @@
   text-transform: uppercase;
 }
 .header .try-button:hover {
-  background: #fe7777;
+  background: linear-gradient(130deg, rgba(167, 229, 255, 0.2666666667), #ff9cbd);
 }
 .header.scrolled {
   background-color: rgba(255, 255, 255, 0.6);

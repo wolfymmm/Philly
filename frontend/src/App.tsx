@@ -4,15 +4,15 @@ import { useEffect, useState } from 'react';
 
 import Loader from './components/Loader/Loader';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
-import About from './components/About/About';
-import Shedule from './components/Shedule/Shedule';
-import Tasks from './components/Tasks/Tasks';
+import About from './pages/About/About';
+import Shedule from './pages/Shedule/Shedule';
+import Tasks from './pages/Tasks/Tasks';
 import Header from './components/Header/Header';
-import Home from './components/Home/Home';
-import Chat from './components/Chat/Chat';
-import Login from './components/Login/Login';
-import Register from './components/Register/Register';
-import Profile from './components/Profile/Profile'
+import Home from './pages/Home/Home';
+import Chat from './pages/Chat/Chat';
+import Login from './pages/Login/Login';
+import Register from './pages/Register/Register';
+import Profile from './pages/Profile/Profile'
 
 
 function App() {

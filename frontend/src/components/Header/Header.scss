@@ -1,6 +1,8 @@
+@import '../../variables.scss';
+
 .header {
   padding: 25px 0;
-  color: white;
+  color: $color-white;
   position: sticky;
   top: 0;
   z-index: 10;
@@ -46,7 +48,7 @@
     padding: 0 170px;
 
     a {
-      color: black;
+      color: $color-black;
       text-decoration: none;
 
       &:hover {
@@ -63,25 +65,25 @@
 
   .login-button {
     font-family: 'Arial', sans-serif;
-    background: #FAFAFA;
+    background: $color-white;
     border: 1px solid #dddddd;
     border-radius: 30px;
-    color: black;
+    color: $color-black;
     font-size: 14px;
     cursor: pointer;
     padding: 10px 30px;
     text-transform: uppercase;
 
     &:hover {
-      background: #fe7777;
+     border: 1px solid $color-pink-medium;
     }
   }
 
   .try-button {
-    background: #FDA4AF;
-    border: 1px solid #FDA4AF;
+    background: $color-pink-medium;
+    border: none;
     border-radius: 30px;
-    color: #9F1239;
+    color: $color-pink-dark;
     font-family: 'Arial', sans-serif;
     font-size: 14px;
     cursor: pointer;
@@ -89,7 +91,7 @@
     text-transform: uppercase;
 
     &:hover {
-      background: #fe7777;
+       background: linear-gradient(130deg, #a7e5ff44, #ff9cbd);
     }
   }
 

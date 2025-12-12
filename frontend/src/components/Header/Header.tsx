@@ -24,7 +24,7 @@ function Header() {
       <div className="header-container">
         <div className="header-content">
           <Link to="/">
-            <img src="/PhillyLogo.svg" alt="Logo" className="logo" />
+            <img src='PhillyLogo.svg' alt="Logo" className="logo" />
           </Link>
 
           <nav>
@@ -39,7 +39,7 @@ function Header() {
             {user ? (
               <Link to="/profile">
                 <img
-                  src={user.avatar || '/default-avatar.png'}
+                  src={user.avatar || 'default-avatar.svg'}
                   alt="Profile"
                   className="header-avatar"
                 />

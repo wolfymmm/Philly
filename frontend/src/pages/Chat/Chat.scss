@@ -1,0 +1,370 @@
+@import '../../variables.scss';
+
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 80vh; // Зменшена висота для кращого вигляду
+  max-height: 800px; // Максимальна висота
+  grid-column: 1 / -1; // Займає 10 колонок з 12 (з відступами з обох боків)
+  margin: 0 40px auto; // Вертикальні відступи
+  background: #f5f5f500;
+  border-radius: 15px;
+  overflow: hidden;
+  font-size: 10px;
+}
+
+.chat-header {
+  color: black;
+  padding: 15px 20px;
+  text-align: center;
+  font-weight: 600;
+  font-size: 30px;
+  position: relative;
+  z-index: 10;
+  
+  h2 {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .user-name-gradient {
+  /* 1. Задаємо градієнт (можете змінити кольори на свій смак) */
+  background: linear-gradient(90deg, #72b4ff 0%, #f4a0b2 50%, #ff8eaa 100%);
+  
+  /* 2. Стандартна техніка для тексту-градієнта */
+  -webkit-background-clip: text;
+  background-clip: text;
+  
+  /* 3. Робимо колір тексту прозорим, щоб просвічувався фон */
+  color: transparent;
+  /* Для підтримки Safari/Chrome іноді потрібна ця властивість: */
+  -webkit-text-fill-color: transparent;
+
+  /* 4. Жирний шрифт, щоб градієнт було краще видно */
+  font-weight: 700; 
+}
+}
+
+.message p {
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+
+// Стилі для списку повідомлень
+.messages-container {
+  flex: 1;
+  padding: 20px;
+  max-height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  position: relative;
+  
+  &::-webkit-scrollbar {
+    width: 6px;
+  }
+}
+
+.message {
+  max-width: 30%;
+  padding: 10px 14px;
+  border-radius: 18px;
+  animation: floatIn 0.3s ease-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  line-height: 1.4;
+  margin: 5px 0;
+  font-size: 10px !important;
+  height: auto;
+  max-height: none;
+
+  &.user-message {
+    align-self: flex-end;
+    background: white;
+    color: white;
+    border-bottom-right-radius: 5px;
+    font-size: 10px;
+  }
+
+  &.ai-message {
+    align-self: flex-start; // вирівнювання вліво
+    background-color: white;
+    color: #333;
+    border-bottom-left-radius: 5px;
+        font-size: 10px !important;
+  }
+}
+
+
+// Центральна GIF миші (збільшена)
+.mouse-gif {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 550px; /* ЗБІЛЬШЕНО */
+  height: 550px; /* ЗБІЛЬШЕНО */
+  z-index: 5;
+  pointer-events: none;
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 50%;
+  }
+}
+
+.quick-questions {
+  display: flex;
+  justify-content: center; /* ВИПРАВЛЕНО: вирівнює кнопки по центру */
+  align-items: center;
+  flex-wrap: nowrap; /* щоб всі кнопки були в один ряд */
+  gap: 8px; /* відстань між кнопками */
+  padding: 5px 0;
+}
+
+.quick-questions button {
+  background-color: #96c5ff; /* ВИПРАВЛЕНО: гарний рожевий колір */
+  color: white;
+  border: none;
+  border-radius: 50px; /* повністю круглі кнопки */
+  width: 300px;   /* маленька ширина */
+  height: 40px;  /* маленька висота */
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s;
+  padding: 0; /* прибираємо внутрішні відступи */
+  flex-shrink: 0; /* щоб кнопки не стискались */
+  
+  &:hover {
+    background: linear-gradient(90deg, #72b4ff 0%, #f4a0b2 50%, #ff8eaa 100%);
+  }
+}
+
+
+.input-container {
+  width: 90%;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.textarea-wrapper {
+  position: relative;
+  width: 100%;
+}
+
+.textarea-wrapper textarea {
+  width: 100%;
+  padding: 20px 80px 5px 30px; /* правий паддінг для кнопок */
+  border-radius: 50px;
+  border: 1px solid #d0d0d0;
+  font-size: 16px;
+  font-family: inherit;
+  resize: none;
+  outline: none;
+}
+
+.textarea-wrapper textarea:focus {
+  border-color: #6a11cb;
+}
+
+/* Контейнер для кнопок */
+.icon-buttons {
+  position: absolute;
+  top: 50%;
+  right: -90px;
+  transform: translateY(-50%);
+  display: flex;
+  gap: 8px;
+}
+
+/* Кнопки-іконки */
+.icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: #e1f1ff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.icon-btn img {
+  width: 20px;
+  height: 20px;
+}
+
+.icon-btn:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.icon-btn:hover:not(:disabled) {
+  background: #ffc0d3;
+}
+
+.icon-btn:active:not(:disabled) {
+  transform: scale(0.92);
+}
+
+/* Мікрофон анімація */
+.mic-btn.listening {
+  background: #ffc0d3 !important;
+  animation: pulse 1.2s infinite;
+}
+
+.mic-btn.listening img {
+  filter: brightness(0) invert(1);
+}
+
+@keyframes pulse {
+  0% { box-shadow: 0 0 0 0 rgba(213, 247, 255, 0.6); }
+  70% { box-shadow: 0 0 0 12px rgba(255, 75, 75, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 75, 75, 0); }
+}
+
+ 
+// Модальне вікно голосового введення
+.voice-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s;
+  
+  &.active {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+
+.voice-content {
+  background-color: white;
+  width: 80%;
+  max-width: 300px;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  transform: scale(0.9);
+  transition: transform 0.3s;
+  
+  .voice-modal.active & {
+    transform: scale(1);
+  }
+}
+
+.listening-animation {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #f0b5ff, #abcaff);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-size: 24px;
+  animation: pulse 1.5s infinite;
+}
+
+.voice-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 15px;
+}
+
+.cancel-btn {
+  padding: 8px 20px;
+  background-color: #f0f0f0;
+  border: none;
+  border-radius: 20px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s;
+  
+  &:hover {
+    background-color: #e0e0e0;
+  }
+}
+
+// Статусні індикатори
+.status-indicators {
+  position: absolute;
+  bottom: 80px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  z-index: 5;
+}
+
+.status-indicator {
+  padding: 5px 10px;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 500;
+  background-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  
+  &.speaking {
+    color: #6a11cb;
+    background-color: rgba(106, 17, 203, 0.1);
+  }
+  
+  &.listening {
+    color: #ee5a24;
+    background-color: rgba(238, 90, 36, 0.1);
+  }
+}
+
+// Анімації
+@keyframes floatIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(106, 17, 203, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 15px rgba(106, 17, 203, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(106, 17, 203, 0);
+  }
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
